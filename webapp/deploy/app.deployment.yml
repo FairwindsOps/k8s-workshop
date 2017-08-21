@@ -1,0 +1,31 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: webapp
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: webapp
+    spec:
+      containers:
+        - name: webapp
+          image: us.gcr.io/ehole-k8s/webapp:1
+          command: ["ruby", "app/app.rb"]
+          # command: ["sleep", "infinity"]
+          ports:
+          - containerPort: 8080
+            name: http
+          env:
+            - name: REDIS_HOST
+              value: 'redis-master'
+            - name: REDIS_PORT
+              value: '6379'
+          resources:
+            limits:
+              cpu: 200m
+              memory: 100Mi
+            requests:
+              cpu: 200m
+              memory: 100Mi
