@@ -20,12 +20,6 @@ get '/app' do
   'Look Ma, no hands'
 end
 
-get '/load' do
-  arr = %w[rats live on no evil star apple car lamb coat car bat silly corn seed weed need feed rats]
-  arr.each { |a| Digest::MD5.new << a }
-  return 'I am working for you, master'
-end
-
 get '/set/:key/:val' do
   key = params.fetch('key','')
   val = params.fetch('val','')
