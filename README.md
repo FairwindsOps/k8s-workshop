@@ -1,4 +1,4 @@
-# Kubernetes workshop at Google SF 8/31/17 with ReactiveOps
+# Kubernetes workshop at Google SF 8/30/17 with ReactiveOps
 
 
 
