@@ -11,7 +11,7 @@ spec:
     spec:
       containers:
         - name: webapp
-          image: us.gcr.io/ehole-k8s/webapp:1
+          image: us.gcr.io/ehole-k8s/webapp:2
           command: ["ruby", "app/app.rb"]
           # command: ["sleep", "infinity"]
           ports:
@@ -25,7 +25,7 @@ spec:
           resources:
             limits:
               cpu: 200m
-              memory: 100Mi
+              memory: 300Mi
             requests:
               cpu: 200m
-              memory: 100Mi
+              memory: 300Mi

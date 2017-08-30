@@ -20,6 +20,14 @@ get '/app' do
   'Look Ma, no hands'
 end
 
+get '/load' do
+  a = Array (1..100)
+  a.each do |i|
+    i.to_s
+  end
+  'Working for my master...'
+end 
+
 get '/set/:key/:val' do
   key = params.fetch('key','')
   val = params.fetch('val','')
