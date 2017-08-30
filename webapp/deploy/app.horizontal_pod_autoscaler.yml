@@ -9,4 +9,4 @@ spec:
     apiVersion: extensions/v1beta1
     kind: Deployment
     name: webapp
-  targetCPUUtilizationPercentage: 50
+  targetCPUUtilizationPercentage: 30

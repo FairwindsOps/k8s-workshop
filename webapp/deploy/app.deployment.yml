@@ -13,7 +13,6 @@ spec:
         - name: webapp
           image: us.gcr.io/ehole-k8s/webapp:2
           command: ["ruby", "app/app.rb"]
-          # command: ["sleep", "infinity"]
           ports:
           - containerPort: 8080
             name: http
