@@ -13,7 +13,7 @@ spec:
     spec:
       containers:
       - name: replica
-        image: gcr.io/google_samples/gb-redisreplica:v1
+        image: gcr.io/google_samples/gb-redisslave:v1
         resources:
           requests:
             cpu: 100m
