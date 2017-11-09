@@ -25,7 +25,7 @@ get '/load' do
   a.each do |i|
     i.to_s
   end
-  'Working for my master...'
+  'Working for my primary...'
 end 
 
 get '/set/:key/:val' do
