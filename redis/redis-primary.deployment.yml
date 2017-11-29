@@ -1,18 +1,18 @@
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: redis-primary
+  name: redis-master
 spec:
   replicas: 1
   template:
     metadata:
       labels:
         app: redis
-        role: primary
+        role: master
         tier: backend
     spec:
       containers:
-      - name: primary
+      - name: aster
         image: gcr.io/google_containers/redis:e2e  # or just image: redis
         resources:
           requests:

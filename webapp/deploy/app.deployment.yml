@@ -13,12 +13,23 @@ spec:
         - name: webapp
           image: us.gcr.io/ehole-k8s/webapp:2
           command: ["ruby", "app/app.rb"]
+          imagePullPolicy: IfNotPresent
+          livenessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /app
+              port: 8080
+              scheme: HTTP
+            initialDelaySeconds: 3
+            periodSeconds: 3
+            successThreshold: 1
+            timeoutSeconds: 1
           ports:
           - containerPort: 8080
             name: http
           env:
             - name: REDIS_HOST
-              value: 'redis-primary'
+              value: 'redis-master'
             - name: REDIS_PORT
               value: '6379'
           resources:
