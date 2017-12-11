@@ -20,6 +20,18 @@ kubectl create clusterrolebinding cluster-admin-binding --clusterrole=cluster-ad
 cd istio-0.3.0/
 kubectl apply -f install/kubernetes/istio-auth.yaml
 ```
+https://github.com/istio/istio/blob/master/install/kubernetes/istio-auth.yaml
+
+
+## Deploy Book Info Application
+```
+kubectl apply -f <(istioctl kube-inject -f samples/bookinfo/kube/bookinfo.yaml)
+```
+Find LB ip address
+```
+kubectl get services --all-namespaces
+```
+
 ### Verify TLS
 ```
 kubectl get configmap istio -o yaml -n istio-system | grep authPolicy | head -1
@@ -33,15 +45,6 @@ In the container:
 curl https://details:9080/details/0 -v --key /etc/certs/key.pem --cert /etc/certs/cert-chain.pem --cacert /etc/certs/root-cert.pem -k
 ```
 
-
-## Deploy Book Info Application
-```
-kubectl apply -f <(istioctl kube-inject -f samples/bookinfo/kube/bookinfo.yaml)
-```
-Find LB ip address
-```
-kubectl get services --all-namespaces
-```
 ### Route all traffic to V1 of Book Info Reviews Service
 
 ```
@@ -74,8 +77,7 @@ kubectl apply -f https://raw.githubusercontent.com/reactiveops/k8s-workshop/mast
 ```
 View Prometheus Dashboard
 ```
-kubectl -n istio-system port-forward prometheus-168775884-1xvvx 808
-0:9090
+kubectl -n istio-system port-forward prometheus-168775884-1xvvx 8080:9090
 ```
 
 ## Istio Dashboard in Grafana
@@ -92,4 +94,5 @@ https://istio.io/docs/welcome/
 
 # More resource: 
 https://github.com/retroryan/istio-workshop
+
 
