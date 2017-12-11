@@ -86,3 +86,10 @@ kubectl apply -f install/kubernetes/addons/grafana.yaml
 ```
 kubectl -n istio-system port-forward grafana-2369932619-qmhlt 8080:3000
 ```
+
+# Istio Docs: 
+https://istio.io/docs/welcome/
+
+# More resource: 
+https://github.com/retroryan/istio-workshop
+
