@@ -1,12 +1,12 @@
 apiVersion: autoscaling/v1
 kind: HorizontalPodAutoscaler
 metadata:
-  name: redis-primary
+  name: redis-master
 spec:
   minReplicas: 1
   maxReplicas: 50
   scaleTargetRef:
     apiVersion: extensions/v1beta1
     kind: Deployment
-    name: redis-primary
+    name: redis-master
   targetCPUUtilizationPercentage: 10

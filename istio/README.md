@@ -27,9 +27,8 @@ https://github.com/istio/istio/blob/master/install/kubernetes/istio-auth.yaml
 ```
 kubectl apply -f <(istioctl kube-inject -f samples/bookinfo/kube/bookinfo.yaml)
 ```
-Find LB ip address
-```
-kubectl get services --all-namespaces
+https://github.com/istio/istio/blob/master/samples/bookinfo/kube/bookinfo.yaml
+
 ```
 
 ### Verify TLS
@@ -44,6 +43,10 @@ In the container:
 ```
 curl https://details:9080/details/0 -v --key /etc/certs/key.pem --cert /etc/certs/cert-chain.pem --cacert /etc/certs/root-cert.pem -k
 ```
+
+Find LB ip address
+```
+kubectl get services --all-namespaces
 
 ### Route all traffic to V1 of Book Info Reviews Service
 
@@ -73,7 +76,7 @@ kubectl apply -f install/kubernetes/addons/prometheus.yaml
 
 Add Telemetry spec for Mixer and Prometheus
 ```
-kubectl apply -f https://raw.githubusercontent.com/reactiveops/k8s-workshop/master/istio/new_telemetry.yaml 
+kubectl apply -f https://raw.githubusercontent.com/reactiveops/k8s-workshop/master/istio/new_telemetry.yml 
 ```
 View Prometheus Dashboard
 ```
