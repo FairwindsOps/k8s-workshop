@@ -40,6 +40,16 @@ spec:
                 valueFrom:
                   secretKeyRef: very-secret
                   key: val2
+              - name: DEPENDENCY_URL
+                valueFrom:
+                  configMapKeyRef:
+                    name: app-config
+                    key: app.dependency.url
+              - name: DEPENDENCY_REQUIRE_TLS
+                valueFrom:
+                  configMapKeyRef:
+                    name: app-config
+                    key: app.dependency.require_tls
           resources:
             limits:
               cpu: 200m
