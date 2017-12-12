@@ -32,6 +32,14 @@ spec:
               value: 'redis-master'
             - name: REDIS_PORT
               value: '6379'
+              - name: SECRET1
+                valueFrom:
+                  secretKeyRef: very-secret
+                  key: val1
+              - name: SECRET2
+                valueFrom:
+                  secretKeyRef: very-secret
+                  key: val2
           resources:
             limits:
               cpu: 200m
