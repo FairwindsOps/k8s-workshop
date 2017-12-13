@@ -12,7 +12,7 @@ spec:
         tier: backend
     spec:
       containers:
-      - name: aster
+      - name: master
         image: gcr.io/google_containers/redis:e2e  # or just image: redis
         resources:
           requests:
@@ -20,3 +20,12 @@ spec:
             memory: 100Mi
         ports:
         - containerPort: 6379
+        env:
+          - name: SECRET1
+            valueFrom:
+              secretKeyRef: very-secret
+              key: val1
+          - name: SECRET2
+            valueFrom:
+              secretKeyRef: very-secret
+              key: val2

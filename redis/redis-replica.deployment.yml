@@ -28,3 +28,12 @@ spec:
           # value: env
         ports:
         - containerPort: 6379
+        env:
+          - name: SECRET1
+            valueFrom:
+              secretKeyRef: very-secret
+              key: val1
+          - name: SECRET2
+            valueFrom:
+              secretKeyRef: very-secret
+              key: val2
