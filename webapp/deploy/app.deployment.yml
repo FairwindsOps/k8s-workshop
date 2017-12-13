@@ -27,29 +27,29 @@ spec:
           ports:
           - containerPort: 8080
             name: http
+          volumeMounts:
+            - name: secrets
+              mountPath: "/etc/secrets"
           env:
             - name: REDIS_HOST
               value: 'redis-master'
             - name: REDIS_PORT
               value: '6379'
-              - name: SECRET1
-                valueFrom:
-                  secretKeyRef: very-secret
+            - name: SECRET1
+              valueFrom:
+                secretKeyRef: 
+                  name: webapp
                   key: val1
-              - name: SECRET2
-                valueFrom:
-                  secretKeyRef: very-secret
-                  key: val2
-              - name: DEPENDENCY_URL
-                valueFrom:
-                  configMapKeyRef:
-                    name: app-config
-                    key: app.dependency.url
-              - name: DEPENDENCY_REQUIRE_TLS
-                valueFrom:
-                  configMapKeyRef:
-                    name: app-config
-                    key: app.dependency.require_tls
+            - name: DEPENDENCY_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: webapp
+                  key: app.dependency.url
+            - name: DEPENDENCY_REQUIRE_TLS
+              valueFrom:
+                configMapKeyRef:
+                  name: webapp
+                  key: app.dependency.require_tls
           resources:
             limits:
               cpu: 200m
@@ -57,3 +57,11 @@ spec:
             requests:
               cpu: 200m
               memory: 300Mi
+      volumes:
+        - name: secrets
+          secret:
+            secretName: webapp
+            items:
+            - key: val2
+              path: secret_file
+              mode: 511
