@@ -32,7 +32,7 @@ spec:
               mountPath: "/etc/secrets"
           env:
             - name: REDIS_HOST
-              value: 'redis-master'
+              value: 'redis-primary'
             - name: REDIS_PORT
               value: '6379'
             - name: SECRET1
