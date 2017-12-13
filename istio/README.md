@@ -78,9 +78,13 @@ Add Telemetry spec for Mixer and Prometheus
 ```
 kubectl apply -f https://raw.githubusercontent.com/reactiveops/k8s-workshop/master/istio/new_telemetry.yml 
 ```
+Get Prometheus pod
+```
+kubectl get pod -n istio-system | grep prometheus
+```
 View Prometheus Dashboard
 ```
-kubectl -n istio-system port-forward prometheus-168775884-1xvvx 8080:9090
+kubectl -n istio-system port-forward <prometheus_pod> 8080:9090
 ```
 
 ## Istio Dashboard in Grafana
@@ -88,6 +92,11 @@ kubectl -n istio-system port-forward prometheus-168775884-1xvvx 8080:9090
 ```
 kubectl apply -f install/kubernetes/addons/grafana.yaml
 ```
+Get Grafana pod
+```
+kubectl get pod -n istio-system | grep grafana
+```
+
 ```
 kubectl -n istio-system port-forward grafana-2369932619-qmhlt 8080:3000
 ```
