@@ -13,18 +13,15 @@ spec:
     spec:
       containers:
       - name: replica
-        image: gcr.io/google_samples/gb-redisslave:v1
+        image: gcr.io/google_samples/gb-redisslave:v2
         resources:
           requests:
             cpu: 100m
             memory: 100Mi
         env:
         - name: GET_HOSTS_FROM
-          value: dns
-          # If your cluster config does not include a dns service, then to
-          # instead access an environment variable to find the primary
-          # service's host, comment out the 'value: dns' line above, and
-          # uncomment the line below:
-          # value: env
+          value: env
+        - name: REDIS_MASTER_SERVICE_HOST
+          value: redis-primary
         ports:
         - containerPort: 6379

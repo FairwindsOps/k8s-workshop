@@ -8,5 +8,5 @@ spec:
   scaleTargetRef:
     apiVersion: extensions/v1beta1
     kind: Deployment
-    name: redis-master
+    name: redis-primary
   targetCPUUtilizationPercentage: 10
