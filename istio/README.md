@@ -76,7 +76,7 @@ kubectl apply -f install/kubernetes/addons/prometheus.yaml
 
 Add Telemetry spec for Mixer and Prometheus
 ```
-kubectl apply -f https://raw.githubusercontent.com/reactiveops/k8s-workshop/master/istio/new_telemetry.yml 
+kubectl apply -f https://raw.githubusercontent.com/reactiveops/k8s-workshop/master/istio/new_telemetry.yml
 ```
 Get Prometheus pod
 ```
