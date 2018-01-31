@@ -1,0 +1,1 @@
+{"jobID":"ead52ce8-aa2c-3815-1183-ee8803576947","spec":{"type":"policy","cause":{"Message":"","User":"ej \u003cej@reactiveops.com\u003e"},"spec":{"default:deployment/webapp":{"add":{"automated":"true"},"remove":null}}},"result":null}
