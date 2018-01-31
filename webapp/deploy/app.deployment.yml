@@ -5,7 +5,7 @@ metadata:
     flux.weave.works/automated: "true"
   name: webapp
 spec:
-  replicas: 1
+  replicas: 4
   template:
     metadata:
       labels:
