@@ -1,8 +1,6 @@
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  annotations:
-    flux.weave.works/automated: "true"
   name: webapp
 spec:
   replicas: 4
