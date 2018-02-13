@@ -6,8 +6,10 @@
 `kubectl apply -f redis`
 
 * Deploy web application
-`kubectl apply -f webapp/deploy/app.deployment.yml`
-`kubectl apply -f webapp/deploy/app.service.yml`
+    * `kubectl apply -f webapp/deploy/app.configmap.yml`
+    * `kubectl apply -f webapp/deploy/app.service.yml`
+    * `kubectl apply -f webapp/deploy/app.deployment.yml`
+    * `kubectl apply -f webapp/deploy/app.service.yml`
 
 * Manually scale webapp
 `kubectl scale deployment webapp --replicas=3`
