@@ -1,0 +1,68 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  annotations:
+    flux.weave.works/automated: "true"
+  name: webapp
+spec:
+  template:
+    metadata:
+      labels:
+        app: webapp
+    spec:
+      containers:
+        - name: webapp
+          image: us.gcr.io/ehole-k8s/webapp:2
+          command: ["ruby", "app/app.rb"]
+          imagePullPolicy: IfNotPresent
+          livenessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /app
+              port: 8080
+              scheme: HTTP
+            initialDelaySeconds: 3
+            periodSeconds: 3
+            successThreshold: 1
+            timeoutSeconds: 1
+          ports:
+          - containerPort: 8080
+            name: http
+          volumeMounts:
+            - name: secrets
+              mountPath: "/etc/secrets"
+          env:
+            - name: REDIS_HOST
+              value: 'redis-primary'
+            - name: REDIS_PORT
+              value: '6379'
+            - name: SECRET1
+              valueFrom:
+                secretKeyRef:
+                  name: webapp
+                  key: val1
+            - name: DEPENDENCY_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: webapp
+                  key: app.dependency.url
+            - name: DEPENDENCY_REQUIRE_TLS
+              valueFrom:
+                configMapKeyRef:
+                  name: webapp
+                  key: app.dependency.require_tls
+          resources:
+            limits:
+              cpu: 200m
+              memory: 300Mi
+            requests:
+              cpu: 200m
+              memory: 300Mi
+      volumes:
+        - name: secrets
+          secret:
+            secretName: webapp
+            items:
+            - key: val2
+              path: secret_file
+              mode: 511
