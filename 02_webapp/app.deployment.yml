@@ -1,0 +1,29 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: webapp
+  namespace: k8s-workshop
+spec:
+  template:
+    metadata:
+      labels:
+        app: webapp
+    spec:
+      containers:
+        - name: webapp
+          image: us.gcr.io/ehole-k8s/webapp:2
+          command: ["ruby", "app/app.rb"]
+          ports:
+          - containerPort: 8080
+            name: http
+          env:
+            - name: REDIS_HOST
+              value: 'redis-primary'
+            - name: REDIS_PORT
+              value: '6379'
+            - name: SECRET1
+              value:
+            - name: DEPENDENCY_URL
+              value:
+            - name: DEPENDENCY_REQUIRE_TLS
+              value: "true"

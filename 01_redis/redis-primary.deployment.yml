@@ -1,27 +1,23 @@
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: redis-replica
+  name: redis-primary
+  namespace: k8s-workshop
 spec:
-  replicas: 2
+  replicas: 1
   template:
     metadata:
       labels:
         app: redis
-        role: replica
+        role: primary
         tier: backend
     spec:
       containers:
-      - name: replica
-        image: gcr.io/google_samples/gb-redisslave:v2
+      - name: redis
+        image: gcr.io/google_containers/redis:e2e  # or just image: redis
         resources:
           requests:
             cpu: 100m
             memory: 100Mi
-        env:
-        - name: GET_HOSTS_FROM
-          value: env
-        - name: REDIS_MASTER_SERVICE_HOST
-          value: redis-primary
         ports:
         - containerPort: 6379

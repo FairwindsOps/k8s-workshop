@@ -1,11 +1,9 @@
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  annotations:
-    flux.weave.works/automated: "true"
   name: webapp
+  namespace: k8s-workshop
 spec:
-  replicas: 4
   template:
     metadata:
       labels:
@@ -15,17 +13,6 @@ spec:
         - name: webapp
           image: us.gcr.io/ehole-k8s/webapp:2
           command: ["ruby", "app/app.rb"]
-          imagePullPolicy: IfNotPresent
-          livenessProbe:
-            failureThreshold: 3
-            httpGet:
-              path: /app
-              port: 8080
-              scheme: HTTP
-            initialDelaySeconds: 3
-            periodSeconds: 3
-            successThreshold: 1
-            timeoutSeconds: 1
           ports:
           - containerPort: 8080
             name: http
@@ -39,31 +26,24 @@ spec:
               value: '6379'
             - name: SECRET1
               valueFrom:
-                secretKeyRef: 
+                secretKeyRef:
                   name: webapp
-                  key: val1
+                  key:
             - name: DEPENDENCY_URL
               valueFrom:
                 configMapKeyRef:
                   name: webapp
-                  key: app.dependency.url
+                  key:
             - name: DEPENDENCY_REQUIRE_TLS
               valueFrom:
                 configMapKeyRef:
                   name: webapp
-                  key: app.dependency.require_tls
-          resources:
-            limits:
-              cpu: 200m
-              memory: 300Mi
-            requests:
-              cpu: 200m
-              memory: 300Mi
+                  key:
       volumes:
         - name: secrets
           secret:
             secretName: webapp
             items:
-            - key: val2
+            - key:
               path: secret_file
               mode: 511
