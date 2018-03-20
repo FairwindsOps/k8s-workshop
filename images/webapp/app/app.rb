@@ -13,11 +13,7 @@ set :port, '8080'
 $redis = Redis.new(:host => ENV['REDIS_HOST'], :port => ENV['REDIS_PORT'])
 
 get '/' do
-    'Hello from GKE!'
-end
-
-get '/app' do
-  'Look Ma, no hands'
+    'Hello from Kubernetes!'
 end
 
 get '/load' do
@@ -28,7 +24,7 @@ get '/load' do
   'Working for my primary...'
 end 
 
-get '/set/:key/:val' do
+get '/:key/:val' do
   key = params.fetch('key','')
   val = params.fetch('val','')
   output =  "Trying to add adding " + key + " with value " + val + "<br>"
@@ -48,9 +44,4 @@ get '/:key' do
     return key + ' does not appear to exist'
   end
 end
-
-get '/?*' do
-  return "No key or value"
-end
-
 

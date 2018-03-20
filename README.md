@@ -12,7 +12,6 @@ This repository stores the various docs and code ReactiveOps uses to do onsite t
 In the workshops above you will be launching a two tier webapp. The web app is a Ruby app using Sinatra. The app is a key value storage and retrieval service with a Redis backend.
 
 ### Interacting with the App
-* [instance_ip]:80/set/[key]/[value] will set a key value
-* [instance_ip]:80/[key] will retreive the value
-* [instance_ip]:80 returns "Hello from Docker"
-* [instance_ip]:80/app return "Look Ma, no hands"
+* [instance_ip]:[port]/[key]/[value] will set a key value
+* [instance_ip]:[port]/[key] will retreive the value
+* [instance_ip]:[port] returns "Hello from Kubernetes"
