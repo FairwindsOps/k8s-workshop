@@ -7,7 +7,9 @@ This repository stores the various docs and code ReactiveOps uses to do onsite t
 * [Complete](complete)
   * The same manifests from the Assembly Required Workshop with the values filled in for you. 
 
-## In the workshops above you will be a two tier webapp. The web app is a Ruby app using Sinatra. The app is a key value storage and retrieval service with a Redis backend.
+## Workshop Interaction
+
+In the workshops above you will be launching a two tier webapp. The web app is a Ruby app using Sinatra. The app is a key value storage and retrieval service with a Redis backend.
 
 ### Interacting with the App
 * [instance_ip]:80/set/[key]/[value] will set a key value
