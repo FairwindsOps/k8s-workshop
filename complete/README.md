@@ -3,7 +3,7 @@
 ## Complete Workshop Walkthrough
 
 1. Create namespace
-    * `kubeclt apply -f namespace.yml
+    * `kubeclt apply -f namespace.yml`
 1. Deploy redis:
     * `kubectl apply -f 01_redis/`
     * `kubectl get deployments`
