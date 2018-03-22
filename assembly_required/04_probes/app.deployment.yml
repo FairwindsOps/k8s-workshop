@@ -15,7 +15,7 @@ spec:
           command: ["ruby", "app/app.rb"]
           livenessProbe:
             httpGet:
-              path: /app
+              path: /
               port:
             initialDelaySeconds:
             periodSeconds:
@@ -24,7 +24,7 @@ spec:
             successThreshold:
           readinessProbe:
             httpGet:
-              path: /app
+              path: /
               port:
             initialDelaySeconds:
             periodSeconds:
