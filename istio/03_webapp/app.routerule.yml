@@ -1,0 +1,15 @@
+---
+apiVersion: config.istio.io/v1alpha2
+kind: RouteRule
+metadata:
+  name: webapp
+spec:
+  destination:
+    name: webapp
+  match:
+    request:
+      headers:
+        uri:
+          prefix: /webapp
+  rewrite:
+    uri: /
