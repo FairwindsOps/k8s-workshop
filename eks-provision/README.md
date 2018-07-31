@@ -1,5 +1,5 @@
 # EKS 101
-1. [Boilerplate](#environment-setup)
+1. [Environment Setup](#environment-setup)
 2. [AWS Role Provisioning](#aws-role-provisioning)
 3. [Cloudformation](#cloudformation)
 4. [AWS IAM Authenticator](#aws-iam-authenticator)
@@ -8,6 +8,7 @@
 7. [(Optional) Destroy Cluster](#destroy-cluster)
 
 ## Environment Setup
+Source in some environment variables to for aws cli auth
 
 ### Source .eks-101 file
 ```
