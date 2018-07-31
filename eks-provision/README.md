@@ -1,15 +1,15 @@
-#EKS 101
-1. [Boilerplate](##Environment Setup)
-2. [AWS Role Provisioning](##AWS Role Provisioning)
-3. [Cloudformation](##Cloudformation)
-4. [AWS IAM Authenticator](##AWS IAM Authenticator)
-5. [Create EKS Cluster](##Create EKS Cluster)
-6. [Setup kubectl](##Setup kubectl)
-7. [(Optional) Destroy Cluster](##Destroy Cluster)
+# EKS 101
+1. [Boilerplate](#Environment Setup)
+2. [AWS Role Provisioning](#AWS Role Provisioning)
+3. [Cloudformation](#Cloudformation)
+4. [AWS IAM Authenticator](#AWS IAM Authenticator)
+5. [Create EKS Cluster](#Create EKS Cluster)
+6. [Setup kubectl](#Setup kubectl)
+7. [(Optional) Destroy Cluster](#Destroy Cluster)
 
-##Environment Setup
+## Environment Setup
 
-###Source .eks-101 file
+### Source .eks-101 file
 ```
 cat <<EOF > .eks-101
 export AWS_ACCESS_KEY_ID=
@@ -21,24 +21,24 @@ EOF
 source .eks-101
 ```
 
-###Setup aws cli in python virtualenv
+### Setup aws cli in python virtualenv
 ```
 $ pip install --user virtualenv
 $ virtual env .
 $ source bin/activate
 ```
 
-##AWS Role Provisioning
+## AWS Role Provisioning
 
 
-###Create Role
+### Create Role
 ```
 aws iam create-role \
   --role-name ${CLUSTERID} \
   --assume-role-policy-document file://eks-role-policy.json 
 ```
 
-###Attach Canned Policies
+### Attach Canned Policies
 ```
 for i in $(cat policy.list); do
     aws iam attach-role-policy \
@@ -47,16 +47,16 @@ for i in $(cat policy.list); do
 done
 ```
 
-##Cloudformation
+## Cloudformation
 ```
 aws iam create-role \
   --role-name ${CLUSTERID} \
   --assume-role-policy-document
 ```
 
-##AWS IAM Authenticator
+## AWS IAM Authenticator
 
-###Download
+### Download
 ```
 mkdir ${HOME}/bin
 curl -o $HOME/bin/heptio-authenticator-aws \
@@ -64,12 +64,12 @@ curl -o $HOME/bin/heptio-authenticator-aws \
   chmod +x ${HOME}/bin/heptio-authenticator-aws
 ```
 
-###Configure
+### Configure
 ```
 export PATH=$PATH:$HOME/bin
 ```
 
-##Create Cluster
+## Create Cluster
 ```
 aws eks create-cluster \
   --name ${CLUSTERID} \
@@ -78,12 +78,12 @@ aws eks create-cluster \
     subnetIds=subnet-0697703a5cee1c763,subnet-0b05c599aa75267e8,subnet-07940df2f00a4b15b,securityGroupIds=sg-06eec9099dac1520d ## change this
 ```
 
-##Setup kubectl
+## Setup kubectl
 [kubectl install page](https://kubernetes.io/docs/tasks/tools/install-kubectl)
 
 We'll just install the vendored binary
 
-###Download
+### Download
 macOS
 ```
 curl -LO \
@@ -100,4 +100,4 @@ curl -LO \
   chomd +x ${HOME}/bin/kubectl
 ```
 
-###Configure
+### Configure
