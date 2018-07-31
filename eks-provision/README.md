@@ -1,11 +1,11 @@
 # EKS 101
 1. [Boilerplate](#environment-setup)
-2. [AWS Role Provisioning](#AWS-Role-Provisioning)
-3. [Cloudformation](#Cloudformation)
-4. [AWS IAM Authenticator](#AWS-IAM-Authenticator)
-5. [Create EKS Cluster](#Create-EKS-Cluster)
-6. [Setup kubectl](#Setup-kubectl)
-7. [(Optional) Destroy Cluster](#Destroy-Cluster)
+2. [AWS Role Provisioning](#aws-role-provisioning)
+3. [Cloudformation](#cloudformation)
+4. [AWS IAM Authenticator](#aws-iam-authenticator)
+5. [Create EKS Cluster](#create-eks-cluster)
+6. [Setup kubectl](#setup-kubectl)
+7. [(Optional) Destroy Cluster](#destroy-cluster)
 
 ## Environment Setup
 
