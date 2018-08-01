@@ -103,7 +103,7 @@ aws eks create-cluster \
   --name ${CLUSTERID} \
   --role-arn $(cat role-arn.txt) \
   --resources-vpc-config \
-    subnetIds=$(cat subnet-id.txt | tr '\n' ','),securityGroupIds=$(cat sg-id.txt)
+    subnetIds=$(paste -sd, subnet-id.txt),securityGroupIds=$(cat sg-id.txt)
 ```
 
 Check cluster status
@@ -200,23 +200,46 @@ within the VPC we created earlier.
 First create a RSA key pair to be used for ssh access to the worker nodes
 ```
 aws ec2 create-key-pair \
-  --key-name ${CLUSTERID} \
-  > ${CLUSTERID}.pem
+  --key-name "${CLUSTERID}" \
+  --query KeyMaterial \
+  --output text > "${CLUSTERID}.pem"
 ```
 
 ```
 aws cloudformation create-stack \
-  --stack-name ${CLUSTERID}-worker-nodes \
+  --stack-name "${CLUSTERID}-worker-nodes" \
   --template-body https://amazon-eks.s3-us-west-2.amazonaws.com/1.10.3/2018-06-05/amazon-eks-nodegroup.yaml \
+  --capabilities CAPABILITY_NAMED_IAM \
   --parameters \
-      ParameterKey=ClusterName,ParameterValue=${CLUSTERID} \
+      ParameterKey=ClusterName,ParameterValue="${CLUSTERID}" \
       ParameterKey=ClusterControlPlaneSecurityGroup,ParameterValue=$(cat sg-id.txt) \
-      ParameterKey=NodeGroupName,ParameterValue=${CLUSTERID} \
+      ParameterKey=NodeGroupName,ParameterValue="${CLUSTERID}" \
       ParameterKey=NodeAutoScalingGroupMinSize,ParameterValue=3 \
       ParameterKey=NodeAutoScalingGroupMaxSize,ParameterValue=3 \
       ParameterKey=NodeInstanceType,ParameterValue=t2.small \
-      ParameterKey=NodeImageId,ParameterValue=$(cat ${AWS_DEFAULT_REGION}.ami-id.txt) \
-      ParameterKey=KeyName,ParameterValue= \
+      ParameterKey=NodeImageId,ParameterValue=$(cat "${AWS_DEFAULT_REGION}.ami-id.txt") \
+      ParameterKey=KeyName,ParameterValue="${CLUSTERID}" \
       ParameterKey=VpcId,ParameterValue=$(cat vpc-id.txt) \
-      ParameterKey=Subnets,ParameterValue=$(cat subnet-id.txt | tr '\n' ',') 
+      ParameterKey=Subnets,ParameterValue=$(paste -sd, subnet-id.txt | sed -e s#,#\\\\,#g) 
+```
+
+Monitor progress
+```
+aws cloudformation describe-stack-resources \
+  --stack-name ${CLUSTERID}-worker-nodes
+```
+
+Once stack is complete we need to stash the arn for the nodes instance role
+```
+aws cloudformation describe-stack-resources \
+  --stack-name ${CLUSTERID}-worker-nodes \
+  --logical-resource-id NodeInstanceRole \
+  --query StackResources[*].PhysicalResourceId \
+  --output text > node-instance-role.txt
+```
+
+... and modify the `aws-auth-cm.yaml` file with this value
+```
+i=$(cat node-instance-role.txt);
+sed -i -e s,NODEROLEARN,$i,g aws-auth-cm.yaml
 ```
