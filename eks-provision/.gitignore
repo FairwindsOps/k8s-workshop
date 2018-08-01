@@ -10,3 +10,4 @@ subnet-id.txt
 role-arn.txt
 *-e
 *.pem
+node-role-arn.txt

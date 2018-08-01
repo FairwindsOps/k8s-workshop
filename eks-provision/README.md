@@ -235,11 +235,53 @@ aws cloudformation describe-stack-resources \
   --stack-name ${CLUSTERID}-worker-nodes \
   --logical-resource-id NodeInstanceRole \
   --query StackResources[*].PhysicalResourceId \
-  --output text > node-instance-role.txt
+  --output text > node-role-arn.txt
 ```
 
 ... and modify the `aws-auth-cm.yaml` file with this value
 ```
-i=$(cat node-instance-role.txt);
+i=$(cat node-role-arn.txt);
 sed -i -e s,NODEROLEARN,$i,g aws-auth-cm.yaml
+```
+
+## Destroy Cluster
+
+### Destroy worker-nodes stack
+```
+aws cloudformation delete-stack \
+  --stack-name ${CLUSTERID}-workers
+```
+
+### Delete ec2 key pair
+```
+aws ec2 delete-key-pair \
+  --key-name "${CLUSTERID}"
+```
+
+### Delete EKS Cluster
+```
+aws eks delete-cluster \
+  --name ${CLUSTERID}
+```
+
+### Delete VPC stack
+```
+aws cloudformation delete-stack \
+  --stack-name ${CLUSTERID}
+```
+
+### Delete role
+Start by detaching the policies
+```
+while read LINE; do
+  aws iam detach-role-policy \
+    --role-name ${CLUSTERID} \
+    --policy-arn $LINE
+done < policies.txt
+```
+
+and then delete the role
+```
+aws iam delete-role \
+  --role-name ${CLUSTERID}
 ```
