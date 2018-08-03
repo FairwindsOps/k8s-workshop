@@ -19,6 +19,9 @@ export AWS_ACCESS_KEY_ID=
 export AWS_SECRET_ACCESS_KEY=
 export AWS_DEFAULT_REGION=
 export CLUSTERID=
+
+export KUBECONFIG=$PWD/.kubeconfig
+export PATH=$PATH:$HOME/bin
 EOF
 
 source .eks-101
@@ -44,14 +47,6 @@ aws iam create-role \
   --assume-role-policy-document file://eks-role-policy.json \
   --query Role.Arn \
   --output text > role-arn.txt
-```
-
-Stash the role arn
-```
-aws iam get-role \
-  --role-name ${CLUSTERID} \
-  --query Role.Arn \
-  --ouput text > role-arn.txt
 ```
 
 ### Attach Canned Policies
@@ -122,12 +117,6 @@ curl -o $HOME/bin/heptio-authenticator-aws \
   chmod +x ${HOME}/bin/heptio-authenticator-aws
 ```
 
-### Configure
-```
-export PATH=$PATH:$HOME/bin
-```
-
-
 ## Setup kubectl
 Kubernetes offers packages for the cli via most package managers.  Instructions based
 on your package manager can be at the link below.
@@ -182,11 +171,6 @@ Set the name of your cluster.
 sed -i -e s,CLUSTERID,$CLUSTERID,g .kubeconfig
 ```
 
-Point to the correct kube config
-```
-export KUBECONFIG=${PWD}/.kubeconfig
-```
-
 Test connectivity
 ```
 kubectl get namespaces
@@ -225,7 +209,7 @@ aws cloudformation create-stack \
 Monitor progress
 ```
 aws cloudformation describe-stack-resources \
-  --stack-name ${CLUSTERID}-worker-nodes
+  --stack-name ${CLUSTERID}-workers
 ```
 
 Once stack is complete we need to stash the arn for the nodes instance role
@@ -240,6 +224,17 @@ aws cloudformation describe-stacks \
 ```
 i=$(cat node-role-arn.txt);
 sed -i -e s,NODEROLEARN,$i,g aws-auth-cm.yaml
+```
+
+... and apply the configmap to kubernetes.  This will authorize incoming connections
+form workers to masters
+```
+kubectl apply -f aws-auth-cm.yaml
+```
+
+Test to see if worker nodes are available in your cluster
+```
+kubectl get nodes
 ```
 
 ## Destroy Cluster
