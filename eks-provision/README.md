@@ -154,7 +154,7 @@ curl \
 To configure kubectl we will need to edit a config file with the endpoint and CA
 for the cluster api along with local config for the heptio-iam-authenticator.
 
-The following series of sed commands will customize a the provided `.kubeconfig`
+The following series of sed commands will customize the provided `.kubeconfig`
 file
 
 Set the cluster endpoint.
