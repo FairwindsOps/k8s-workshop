@@ -110,10 +110,19 @@ aws eks describe-cluster \
 ## AWS IAM Authenticator
 
 ### Download
+macOS
 ```
 mkdir ${HOME}/bin
 curl -o $HOME/bin/heptio-authenticator-aws \
   https://amazon-eks.s3-us-west-2.amazonaws.com/1.10.3/2018-06-05/bin/darwin/amd64/heptio-authenticator-aws && \
+  chmod +x ${HOME}/bin/heptio-authenticator-aws
+```
+
+Linux
+```
+mkdir ${HOME}/bin
+  curl -o $HOME/bin/heptio-authenticator-aws \
+  https://amazon-eks.s3-us-west-2.amazonaws.com/1.10.3/2018-07-26/bin/linux/amd64/aws-iam-authenticator \
   chmod +x ${HOME}/bin/heptio-authenticator-aws
 ```
 
