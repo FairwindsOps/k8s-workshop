@@ -29,7 +29,7 @@ source .eks-101
 pip install --user virtualenv
 virtual env .
 source bin/activate
-pip install -u awscli
+pip install -U awscli
 ```
 
 ## AWS Role Provisioning
@@ -41,7 +41,9 @@ talk to eachother.
 ```
 aws iam create-role \
   --role-name ${CLUSTERID} \
-  --assume-role-policy-document file://eks-role-policy.json 
+  --assume-role-policy-document file://eks-role-policy.json \
+  --query Role.Arn \
+  --output text > role-arn.txt
 ```
 
 Stash the role arn
@@ -49,7 +51,7 @@ Stash the role arn
 aws iam get-role \
   --role-name ${CLUSTERID} \
   --query Role.Arn \
-  | sed -e s/\"//g > role-arn.txt
+  --ouput text > role-arn.txt
 ```
 
 ### Attach Canned Policies
@@ -73,27 +75,24 @@ aws cloudformation create-stack \
 
 We will need to stash VPC, subnet and security group id values
 ```
-aws cloudformation describe-stack-resources \
-  --stack-name ${CLUSTERID} \
-  --logical-resource-id VPC \
-  --query StackResources[*].PhysicalResourceId \
-  --output text > vpc-id.txt
-```
-```
-for i in {1..3}; do
-  aws cloudformation describe-stack-resources \
-  --stack-name ${CLUSTERID} \
-  --logical-resource-id Subnet0$i \
-  --query StackResources[*].PhysicalResourceId \
-  --output text >> subnet-id.txt; done
+aws cloudformation describe-stacks \
+  --stack-name $CLUSTERID \
+  --query Stacks[0].Outputs[*].OutputValue \
+  --output text | tr '\t' '\n' | grep vpc > vpc-id.txt
 ```
 
 ```
-aws cloudformation describe-stack-resources \
-  --stack-name ${CLUSTERID} \
-  --logical-resource-id ControlPlaneSecurityGroup \
-  --query StackResources[*].PhysicalResourceId \
-  --output text > sg-id.txt
+aws cloudformation describe-stacks \
+  --stack-name $CLUSTERID \
+  --query Stacks[0].Outputs[*].OutputValue \
+  --output text | tr '\t' '\n' | grep subnet > subnet-id.txt
+```
+
+```
+aws cloudformation describe-stacks \
+  --stack-name $CLUSTERID \
+  --query Stacks[0].Outputs[*].OutputValue \
+  --output text | tr '\t' '\n' | grep sg > sg-id.txt
 ```
 
 ## Create Cluster
@@ -103,7 +102,7 @@ aws eks create-cluster \
   --name ${CLUSTERID} \
   --role-arn $(cat role-arn.txt) \
   --resources-vpc-config \
-    subnetIds=$(paste -sd, subnet-id.txt),securityGroupIds=$(cat sg-id.txt)
+    subnetIds=$(cat subnet-id.txt),securityGroupIds=$(cat sg-id.txt)
 ```
 
 Check cluster status
@@ -207,20 +206,20 @@ aws ec2 create-key-pair \
 
 ```
 aws cloudformation create-stack \
-  --stack-name "${CLUSTERID}-worker-nodes" \
+  --stack-name "${CLUSTERID}-workers" \
   --template-body https://amazon-eks.s3-us-west-2.amazonaws.com/1.10.3/2018-06-05/amazon-eks-nodegroup.yaml \
   --capabilities CAPABILITY_NAMED_IAM \
   --parameters \
       ParameterKey=ClusterName,ParameterValue="${CLUSTERID}" \
       ParameterKey=ClusterControlPlaneSecurityGroup,ParameterValue=$(cat sg-id.txt) \
       ParameterKey=NodeGroupName,ParameterValue="${CLUSTERID}" \
-      ParameterKey=NodeAutoScalingGroupMinSize,ParameterValue=3 \
+      ParameterKey=NodeAutoScalingGroupMinSize,ParameterValue=1 \
       ParameterKey=NodeAutoScalingGroupMaxSize,ParameterValue=3 \
-      ParameterKey=NodeInstanceType,ParameterValue=t2.small \
+      ParameterKey=NodeInstanceType,ParameterValue=t2.medium \
       ParameterKey=NodeImageId,ParameterValue=$(cat "${AWS_DEFAULT_REGION}.ami-id.txt") \
       ParameterKey=KeyName,ParameterValue="${CLUSTERID}" \
       ParameterKey=VpcId,ParameterValue=$(cat vpc-id.txt) \
-      ParameterKey=Subnets,ParameterValue=$(paste -sd, subnet-id.txt | sed -e s#,#\\\\,#g) 
+      ParameterKey=Subnets,ParameterValue=$(cat subnet-id.txt | sed -e s#,#\\\\,#g) 
 ```
 
 Monitor progress
@@ -231,10 +230,9 @@ aws cloudformation describe-stack-resources \
 
 Once stack is complete we need to stash the arn for the nodes instance role
 ```
-aws cloudformation describe-stack-resources \
-  --stack-name ${CLUSTERID}-worker-nodes \
-  --logical-resource-id NodeInstanceRole \
-  --query StackResources[*].PhysicalResourceId \
+aws cloudformation describe-stacks \
+  --stack-name $CLUSTERID-workers \
+  --query Stacks[0].Outputs[*].OutputValue \
   --output text > node-role-arn.txt
 ```
 
