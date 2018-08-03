@@ -30,7 +30,7 @@ source .eks-101
 ### Setup aws cli in python virtualenv
 ```
 pip install --user virtualenv
-virtual env .
+virtualenv .
 source bin/activate
 pip install -U awscli
 ```
