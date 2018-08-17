@@ -18,5 +18,6 @@
     * `curl [external_ip]/asdf/1234`
     * `curl [external_ip]/asdf`
 1. Scaling
-    * Apply some load `ab -n 30000 -c 100 http://[external_ip]`
+    * Install `ab`: `sudo apt-get install apache2-utils --yes`
+    * Apply some load `ab -n 30000 -c 100 http://[external_ip]:[port]/`
 

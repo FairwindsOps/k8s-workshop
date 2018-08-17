@@ -31,6 +31,7 @@
     * Edit 05_scaling/app.deployment.yml and set the CPU to to `200m` and the memory to `300Mi`
     * Edit 05_scaling/*.horizontal_pod_autoscaler.yml and set `targetCPUUtilizationPercentage` and `maxReplicas`
     * `kubectl apply -f 05_scaling/`
+    * Install `ab`: `sudo apt-get install apache2-utils --yes`
     * Apply some load `ab -n 30000 -c 100 http://[external_ip]:[port]/`
 1. Network policy
     * `kubectl apply -f 06_networkpolicy/default.networkpolicy.yml`
