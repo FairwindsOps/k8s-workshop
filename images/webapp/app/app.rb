@@ -12,8 +12,25 @@ set :port, '8080'
 
 $redis = Redis.new(:host => ENV['REDIS_HOST'], :port => ENV['REDIS_PORT'])
 
+if ENV['CHAOS']
+  chaos_limit = rand(1..100)
+else
+  chaos_limit = -1
+end
+
+chaos_count = 0
+
+before do
+  if chaos_limit > 0 and chaos_limit <= chaos_count
+    Process.kill('KILL', Process.pid)
+  end
+  chaos_count += 1
+end
+
 get '/' do
-    'Hello from Kubernetes!'
+  
+  output = 'Hello from Kubernetes! '
+  return output
 end
 
 get '/load' do
@@ -21,7 +38,8 @@ get '/load' do
   a.each do |i|
     i.to_s
   end
-  'Working for my primary...'
+  output = 'Working for my primary...' + chaos_count.to_s + ':' + chaos_limit.to_s
+  return output
 end 
 
 get '/:key/:val' do
