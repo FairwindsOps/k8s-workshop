@@ -7,8 +7,8 @@
     * `kubectl apply -f 01_redis/`
     * `kubectl get deployments`
     * `kubectl get pods`
-    * `kubectl describe pod <redis master>`
-    * `kubectl logs <redis master>`
+    * `kubectl describe pod <redis primary>`
+    * `kubectl logs <redis primary>`
     * `kubectl get services`
 1. Deploy the basic webapp
     * Edit 02_webapp/app.deployment.yml and set a value for `SECRET1` and `DEPENDENCY_URL`.
