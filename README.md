@@ -13,7 +13,7 @@ In the workshops above you will be launching a two tier webapp. The web app is a
 
 ### Interacting with the App
 * [instance_ip]:[port]/[key]/[value] will set a key value
-* [instance_ip]:[port]/[key] will retreive the value
+* [instance_ip]:[port]/[key] will retrieve the value
 * [instance_ip]:[port] returns "Hello from Kubernetes"
 
 ### Optional Configuration
