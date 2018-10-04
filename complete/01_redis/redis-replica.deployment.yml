@@ -2,7 +2,6 @@ apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
   name: redis-replica
-  namespace: k8s-workshop
 spec:
   replicas: 1
   template:

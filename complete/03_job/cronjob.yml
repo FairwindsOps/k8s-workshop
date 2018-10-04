@@ -1,0 +1,21 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: cronloader 
+spec:
+  schedule: "*/1 * * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: loader 
+            image: lanceatro/webapp:v0.0.1
+            command: ["ruby","app/job.rb"]
+            imagePullPolicy: Always 
+            env:
+              - name: REDIS_HOST
+                value: 'redis-primary'
+              - name: REDIS_PORT
+                value: '6379'
+          restartPolicy: Never

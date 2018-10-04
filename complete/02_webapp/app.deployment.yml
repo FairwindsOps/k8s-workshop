@@ -12,9 +12,10 @@ spec:
     spec:
       containers:
         - name: webapp
-          image: quay.io/reactiveops/k8s-workshop:latest
+          image: lanceatro/webapp:v0.0.1
           command: ["ruby", "app/app.rb"]
-          imagePullPolicy: IfNotPresent
+#          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
           livenessProbe:
             failureThreshold: 3
             httpGet:
