@@ -7,13 +7,15 @@ RUN bundle install --path vendor/bundle
 
 FROM ruby:2.2.7
 
+WORKDIR /app
+
 RUN apt-get update && \
     apt-get install -y net-tools
 
 COPY --from=build /app/vendor/bundle/* ${BUNDLE_PATH}/
 
-COPY /app/app.rb /app/app.rb
-COPY /app/job.rb /app/job.rb
+COPY /app/app.rb . 
+COPY /app/job.rb . 
 
 EXPOSE 8080
 CMD ["ruby", "/app/app.rb"]

@@ -8,7 +8,7 @@ spec:
     spec:
       containers:
       - name: loader 
-        image: lanceatro/webapp:v0.0.1
+        image: lanceatro/wowza:v0.0.1
         command: ["ruby","app/job.rb"]
         imagePullPolicy: Always 
         env:

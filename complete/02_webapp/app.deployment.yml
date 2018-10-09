@@ -5,6 +5,7 @@ metadata:
     flux.weave.works/automated: "true"
   name: webapp
 spec:
+  replicas: 2
   template:
     metadata:
       labels:
@@ -12,7 +13,7 @@ spec:
     spec:
       containers:
         - name: webapp
-          image: lanceatro/webapp:v0.0.1
+          image: lanceatro/wowza:v0.0.1
           command: ["ruby", "app/app.rb"]
 #          imagePullPolicy: IfNotPresent
           imagePullPolicy: Always
@@ -27,7 +28,7 @@ spec:
             successThreshold: 1
             timeoutSeconds: 1
           readinessProbe:
-            failureThreshold: 1
+            failureThreshold: 5 
             httpGet:
               path: /
               port: 8080
