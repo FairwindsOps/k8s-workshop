@@ -26,7 +26,7 @@ read CLUSTERID
 
 aws iam create-role \
   --role-name ${CLUSTERID} \
-  --assume-role-policy-document file://eks-role-policy.json \
+  --assume-role-policy-document file://${DOCSDIR}/eks-role-policy.json \
   --query Role.Arn \
   --output text > ${INVENTORYDIR}/role-arn.txt
 
