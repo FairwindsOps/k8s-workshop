@@ -27,6 +27,8 @@ aws cloudformation create-stack \
   --stack-name ${CLUSTERID} \
   --template-body https://amazon-eks.s3-us-west-2.amazonaws.com/1.10.3/2018-06-05/amazon-eks-vpc-sample.yaml
 
+aws cloudformation wait stack-create-complete --stack-name lance-demo
+
 VPC_ID=$(aws cloudformation describe-stacks \
               --stack-name ${CLUSTERID} \
               --query Stacks[0].Outputs[*].OutputValue \
