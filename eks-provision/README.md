@@ -7,7 +7,6 @@
 Click the link below to create a Cloud9 console environment
 
 <a href="https://us-west-2.console.aws.amazon.com/cloud9/home?region=us-west-2" target="_blank">Cloud9</a>
-[Cloud9](https://us-west-2.console.aws.amazon.com/cloud9/home?region=us-west-2)
 
 ## Create Role
 Click the link below to create an Instance Profile to Attach to your Cloud9 Environment
