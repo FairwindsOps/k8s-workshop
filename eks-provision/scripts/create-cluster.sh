@@ -7,47 +7,50 @@
 # dependencies: requires instance profile with admin role
 #
 
+CLUSTERID=
+IVENTORYDIR="./inventory"
+
 echo -n "Please enter a name for your cluster and press [ENTER]":
 read CLUSTERID
 
-ROLE_ARN=$(aws iam create-role \
-              --role-name ${CLUSTERID} \
-              --assume-role-policy-document file://eks-role-policy.json \
-              --query Role.Arn \
-              --output text)
+aws iam create-role \
+  --role-name ${CLUSTERID} \
+  --assume-role-policy-document file://eks-role-policy.json \
+  --query Role.Arn \
+  --output text > ${INVENTORYDIR}/role-arn.txt
 
 while read LINE; do
     aws iam attach-role-policy \
       --policy-arn $LINE \
       --role-name ${CLUSTERID}
-done < policies.txt
+done < ${IVENTORYDIR}/policies.txt
 
 ## Create VPC and Network Facilities
 aws cloudformation create-stack \
   --stack-name ${CLUSTERID} \
   --template-body https://amazon-eks.s3-us-west-2.amazonaws.com/1.10.3/2018-06-05/amazon-eks-vpc-sample.yaml
 
-aws cloudformation wait stack-create-complete --stack-name lance-demo
+aws cloudformation wait stack-create-complete --stack-name ${CLUSTERID}
 
-VPC_ID=$(aws cloudformation describe-stacks \
-              --stack-name ${CLUSTERID} \
-              --query Stacks[0].Outputs[*].OutputValue \
-              --output text | tr '\t' '\n' | grep vpc)
+aws cloudformation describe-stacks \
+  --stack-name ${CLUSTERID} \
+  --query Stacks[0].Outputs[*].OutputValue \
+  --output text | tr '\t' '\n' | grep vpc > ${INVENTORYDIR}/vpc-id.txt
 
-SUBNET_ID=$(aws cloudformation describe-stacks \
-              --stack-name $CLUSTERID \
-              --query Stacks[0].Outputs[*].OutputValue \
-              --output text | tr '\t' '\n' | grep subnet)
+aws cloudformation describe-stacks \
+  --stack-name $CLUSTERID \
+  --query Stacks[0].Outputs[*].OutputValue \
+  --output text | tr '\t' '\n' | grep subnet > ${IVENTORYDIR}/subnet-id.txt
 
-SG_ID=$(aws cloudformation describe-stacks \
-              --stack-name $CLUSTERID \
-              --query Stacks[0].Outputs[*].OutputValue \
-              --output text | tr '\t' '\n' | grep sg)
+aws cloudformation describe-stacks \
+  --stack-name $CLUSTERID \
+  --query Stacks[0].Outputs[*].OutputValue \
+  --output text | tr '\t' '\n' | grep sg > ${INVENTORYDIR}/sg-id.txt
 
 
 ## Create Cluster
 aws eks create-cluster \
   --name "${CLUSTERID}" \
-  --role-arn "${ROLE_ARN}" \
+  --role-arn "$( cat ${INVENTORYDIR}/role-arn.txt )" \
   --resources-vpc-config \
-    subnetIds=${SUBNET_ID},securityGroupIds=${SG_ID}
+  subnetIds=$( cat ${INVENTORYDIR}/subnet-id.txt ),securityGroupIds=$( cat ${INVENTORYDIR}/sg-id.txt )
