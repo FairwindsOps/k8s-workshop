@@ -25,6 +25,11 @@ sudo mv ~/go/bin/aws-iam-authenticator /usr/local/bin/aws-iam-authenticator
 # amazon-linux deps
 yum install -y jq
 
+# setup region
+export AWS_REGION=$(curl -s 169.254.169.254/latest/dynamic/instance-identity/document | jq -r .region)
+echo "export AWS_REGION=${AWS_REGION}" >> ~/.bash_profile
+aws configure set default.region ${AWS_REGION}
+
 # verify binaries
 printf "\n"
 printf "Kubectl Version:\t%s\n" "$(kubectl version --short --client)"
