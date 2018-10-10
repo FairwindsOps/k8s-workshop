@@ -1,6 +1,9 @@
 #! /usr/bin/env bash
 # Destroy Cluster
 
+#- VARIABLES -#
+DOCSDIR="docs"
+
 echo -n "Please enter the name of your cluster and press [ENTER]"
 read CLUSTERID
 
@@ -25,7 +28,7 @@ while read LINE; do
   aws iam detach-role-policy \
     --role-name ${CLUSTERID} \
     --policy-arn $LINE
-done < policies.txt
+done < ${DOCSDIR}/policies.txt
 
 aws iam delete-role \
   --role-name ${CLUSTERID}

@@ -7,9 +7,20 @@
 # dependencies: requires instance profile with admin role
 #
 
+#- variables -#
 CLUSTERID=
-IVENTORYDIR="./inventory"
+INVENTORYDIR="inventory"
+DOCSDIR="docs"
 
+#- functions -#
+function get_cluster_status {
+CLUSTERSTATUS=$(aws eks describe-cluster \
+                  --name ${CLUSTERID} \
+                  --query cluster.status)
+}
+
+
+#- proecedural -#
 echo -n "Please enter a name for your cluster and press [ENTER]":
 read CLUSTERID
 
@@ -23,7 +34,7 @@ while read LINE; do
     aws iam attach-role-policy \
       --policy-arn $LINE \
       --role-name ${CLUSTERID}
-done < ${IVENTORYDIR}/policies.txt
+done < ${DOCSDIR}/policies.txt
 
 ## Create VPC and Network Facilities
 aws cloudformation create-stack \
@@ -40,7 +51,7 @@ aws cloudformation describe-stacks \
 aws cloudformation describe-stacks \
   --stack-name $CLUSTERID \
   --query Stacks[0].Outputs[*].OutputValue \
-  --output text | tr '\t' '\n' | grep subnet > ${IVENTORYDIR}/subnet-id.txt
+  --output text | tr '\t' '\n' | grep subnet > ${INVENTORYDIR}/subnet-id.txt
 
 aws cloudformation describe-stacks \
   --stack-name $CLUSTERID \
@@ -54,3 +65,39 @@ aws eks create-cluster \
   --role-arn "$( cat ${INVENTORYDIR}/role-arn.txt )" \
   --resources-vpc-config \
   subnetIds=$( cat ${INVENTORYDIR}/subnet-id.txt ),securityGroupIds=$( cat ${INVENTORYDIR}/sg-id.txt )
+
+# poll for cluster creations complete
+get_cluster_status
+while [ "${CLUSTERSTATUS}" == "CREATING" ]; do
+    echo -n "The ${CLUSTERID} control plane is still ${CLUSTERSTATUS}"
+    sleep 5
+    get_cluster_status
+done
+if [ "$CLUSTERSTATUS" == "ERROR" ]; then
+    echo "The ${CLUSTERID} control plane failed to create"
+    aws eks describe-cluster --name ${CLUSTERID} | jq .
+    exit 1
+fi
+
+# configure kubect access
+# Set the cluster endpoint.
+i=$(aws eks describe-cluster \
+      --name ${CLUSTERID} \
+      --query cluster.endpoint \
+      --output text);
+sed -i -e s,ENDPOINT,$i,g ${DOCSDIR}/.kubeconfig
+
+#Set the cluster CA.
+i=$(aws eks describe-cluster \
+      --name ${CLUSTERID} \
+      --query cluster.certificateAuthority.data \
+      --output text);
+sed -i -e s,CADATA,$i,g ${DOCSDIR}/.kubeconfig
+
+#Set the name of your cluster.
+sed -i -e s,CLUSTERID,$CLUSTERID,g ${DOCSDIR}/.kubeconfig
+
+cp ${DOCSDIR}/.kubeconfig ~/.kube/config
+
+#Test connectivity
+kubectl get ns
