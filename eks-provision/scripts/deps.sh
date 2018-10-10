@@ -14,13 +14,13 @@ KUBECTL_VERSION="1.10.3/2018-07-26"
 # install kubectl
 mkdir -p ~/.kube
 sudo curl --silent --location \
-    -o /usr/local/bin/kubectl \
+    -o /usr/bin/kubectl \
     "https://amazon-eks.s3-us-west-2.amazonaws.com/${KUBECTL_VERSION}/bin/linux/${ARCH}/kubectl"
-sudo chmod +x /usr/local/bin/kubectl
+sudo chmod +x /usr/bin/kubectl
 
 # install aws-iam-authenticator
 go get -u -v github.com/kubernetes-sigs/aws-iam-authenticator/cmd/aws-iam-authenticator
-sudo mv ~/go/bin/aws-iam-authenticator /usr/local/bin/aws-iam-authenticator
+sudo mv ~/go/bin/aws-iam-authenticator /usr/bin/aws-iam-authenticator
 
 # amazon-linux deps
 yum install -y jq
