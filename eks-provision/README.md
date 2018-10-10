@@ -5,11 +5,13 @@
 
 ## Create Cloud9 Environment
 Click the link below to create a Cloud9 console environment
+
 [Cloud9](https://us-west-2.console.aws.amazon.com/cloud9/home?region=us-west-2)
 
 ## Create Role
 Click the link below to create an Instance Profile to Attach to your Cloud9 Environment
+
 [AWS IAM](https://console.aws.amazon.com/iam/home#/roles$new?step=review&commonUseCase=EC2%2BEC2&selectedUseCase=EC2&policies=arn:aws:iam::aws:policy%2FAdministratorAccess)
 
 ## Attach role to Cloud9 Environment
-[Cloud9](https://console.aws.amazon.com/ec2/v2/home?#Instances:tag:Name=aws-cloud9-eksworkshop*;sort=desc:launchTime)
+[Cloud9](https://console.aws.amazon.com/ec2/v2/home?#Instances:tag:Name=*eks*;sort=desc:launchTime)
