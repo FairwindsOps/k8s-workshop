@@ -16,7 +16,8 @@ DOCSDIR="docs"
 function get_cluster_status {
 CLUSTERSTATUS=$(aws eks describe-cluster \
                   --name ${CLUSTERID} \
-                  --query cluster.status)
+                  --query cluster.status \
+                  --output text)
 }
 
 
