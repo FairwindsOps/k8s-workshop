@@ -33,4 +33,4 @@ aws configure set default.region ${AWS_REGION}
 # verify binaries
 printf "\n"
 printf "Kubectl Version:\t%s\n" "$(kubectl version --short --client)"
-printf "AWS IAM Authenticator:\t%s\n" "$(which aws-iam-authenticator)
+printf "AWS IAM Authenticator:\t%s\n" "$(which aws-iam-authenticator)"

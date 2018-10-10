@@ -2,6 +2,8 @@
 1. [Create Cloud9 Environment](#create-cloud9-environment)
 2. [Create Admin Role for Cloud9 Environment](#create-role)
 3. [Attach Role to Cloud9 Environment](#attach-role-to-cloud9-environment)
+4. [Turn Off Temorary Credentials in Cloud9](#turn-off-temporary-creds)
+5. [Clone k8sworkshop Repo](#clone-k8sworkshop-repo)
 
 ## Create Cloud9 Environment
 Click the link below to create a Cloud9 console environment
@@ -15,3 +17,10 @@ Click the link below to create an Instance Profile to Attach to your Cloud9 Envi
 
 ## Attach role to Cloud9 Environment
 [Cloud9](https://us-west-2.console.aws.amazon.com/ec2/v2/home?region=us-west-2#Instances:sort=desc:launchTime)
+
+## Turn off temporary creds
+
+## Clone k8sworkshop Repo
+```
+git clone https://github.com/reactiveops/k8s-workshop.git
+```
