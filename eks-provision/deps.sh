@@ -26,5 +26,6 @@ sudo mv ~/go/bin/aws-iam-authenticator /usr/local/bin/aws-iam-authenticator
 yum install -y jq
 
 # verify binaries
-printf "Kubectl Version:\t%s\n" % $(kubectl version --short --client)
-printf "AWS IAM Authticator:\t%s\n" % $(aws-iam-authenticator --help)
+printf "\n"
+printf "Kubectl Version:\t%s\n" "$(kubectl version --short --client)"
+printf "AWS IAM Authenticator:\t%s\n" "$(which aws-iam-authenticator)
