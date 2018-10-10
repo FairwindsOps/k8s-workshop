@@ -21,7 +21,6 @@ aws cloudformation delete-stack \
   --stack-name ${CLUSTERID}
 
 ### Delete role
-Start by detaching the policies
 while read LINE; do
   aws iam detach-role-policy \
     --role-name ${CLUSTERID} \
