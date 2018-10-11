@@ -102,3 +102,39 @@ cp ${DOCSDIR}/.kubeconfig ~/.kube/config
 
 #Test connectivity
 kubectl get ns
+
+aws ec2 create-key-pair \
+  --key-name "${CLUSTERID}" \
+  --query KeyMaterial \
+  --output text > "${DOCSDIR}/${CLUSTERID}.pem"
+
+aws cloudformation create-stack \
+  --stack-name "${CLUSTERID}-workers" \
+  --template-body https://amazon-eks.s3-us-west-2.amazonaws.com/1.10.3/2018-06-05/amazon-eks-nodegroup.yaml \
+  --capabilities CAPABILITY_NAMED_IAM \
+  --parameters \
+      ParameterKey=ClusterName,ParameterValue="${CLUSTERID}" \
+      ParameterKey=ClusterControlPlaneSecurityGroup,ParameterValue=$(cat sg-id.txt) \
+      ParameterKey=NodeGroupName,ParameterValue="${CLUSTERID}" \
+      ParameterKey=NodeAutoScalingGroupMinSize,ParameterValue=1 \
+      ParameterKey=NodeAutoScalingGroupMaxSize,ParameterValue=3 \
+      ParameterKey=NodeInstanceType,ParameterValue=t2.medium \
+      ParameterKey=NodeImageId,ParameterValue=$(cat "${INVENTORYDIR}/${AWS_REGION}.ami-id.txt") \
+      ParameterKey=KeyName,ParameterValue="${CLUSTERID}" \
+      ParameterKey=VpcId,ParameterValue=$(cat ${INVENTORYDIR}/vpc-id.txt) \
+      ParameterKey=Subnets,ParameterValue=$(cat ${INVENTORYDIR}/subnet-id.txt | sed -e s#,#\\\\,#g)
+
+aws cloudformation wait stack-create-complete --stack-name "${CLUSTERID}-workers"
+
+aws cloudformation describe-stacks \
+  --stack-name $CLUSTERID-workers \
+  --query Stacks[0].Outputs[*].OutputValue \
+  --output text > ${INVENTORYDIR}/node-role-arn.txt
+
+i=$(cat node-role-arn.txt);
+sed -i -e s,NODEROLEARN,$i,g ${DOCSDIR}/aws-auth-cm.yaml
+
+kubectl apply -f ${DOCSDIR}/aws-auth-cm.yaml
+
+echo "Gok kube nodes? >>"
+kubectl get nodes
