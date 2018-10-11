@@ -11,6 +11,7 @@
 CLUSTERID=
 INVENTORYDIR="inventory"
 DOCSDIR="docs"
+KUBE_CONFIG=${HOME}/.kube/config
 AWS_REGION=$(curl -s 169.254.169.254/latest/dynamic/instance-identity/document | jq -r .region)
 
 #- functions -#
@@ -39,6 +40,7 @@ while read LINE; do
 done < ${DOCSDIR}/policies.txt
 
 ## Create VPC and Network Facilities
+echo "Creating VPC for EKS cluster"
 aws cloudformation create-stack \
   --stack-name ${CLUSTERID} \
   --template-body https://amazon-eks.s3-us-west-2.amazonaws.com/1.10.3/2018-06-05/amazon-eks-vpc-sample.yaml
@@ -83,32 +85,36 @@ fi
 
 # configure kubect access
 # Set the cluster endpoint.
+cp ${DOCSDIR}/.kubeconfig ~/.kube/config
 i=$(aws eks describe-cluster \
       --name ${CLUSTERID} \
       --query cluster.endpoint \
       --output text);
-sed -i -e s,ENDPOINT,$i,g ${DOCSDIR}/.kubeconfig
+sed -i -e s,ENDPOINT,$i,g ${KUBE_CONFIG}
 
 #Set the cluster CA.
 i=$(aws eks describe-cluster \
       --name ${CLUSTERID} \
       --query cluster.certificateAuthority.data \
       --output text);
-sed -i -e s,CADATA,$i,g ${DOCSDIR}/.kubeconfig
+sed -i -e s,CADATA,$i,g ${KUBE_CONFIG}
 
 #Set the name of your cluster.
-sed -i -e s,CLUSTERID,$CLUSTERID,g ${DOCSDIR}/.kubeconfig
-
-cp ${DOCSDIR}/.kubeconfig ~/.kube/config
+sed -i -e s,CLUSTERID,$CLUSTERID,g ${KUBE_CONFIG}
 
 #Test connectivity
-kubectl get ns
+sleep 2
+echo "Checking kuberentes namespaces"
+kubectl get namespaces
 
 aws ec2 create-key-pair \
   --key-name "${CLUSTERID}" \
   --query KeyMaterial \
   --output text > "${DOCSDIR}/${CLUSTERID}.pem"
 
+echo "Creating kubernetes workers"
+echo "Please be patient, this will take a few minutes"
+echo ""
 aws cloudformation create-stack \
   --stack-name "${CLUSTERID}-workers" \
   --template-body https://amazon-eks.s3-us-west-2.amazonaws.com/1.10.3/2018-06-05/amazon-eks-nodegroup.yaml \
@@ -137,5 +143,6 @@ sed -i -e s,NODEROLEARN,$i,g ${DOCSDIR}/aws-auth-cm.yaml
 
 kubectl apply -f ${DOCSDIR}/aws-auth-cm.yaml
 
-echo "Gok kube nodes? >>"
+sleep 5
+echo "Checking for kubernetes workers"
 kubectl get nodes

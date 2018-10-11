@@ -4,6 +4,8 @@
 3. [Attach Role to Cloud9 Environment](#attach-role-to-cloud9-environment)
 4. [Turn Off Temorary Credentials in Cloud9](#turn-off-temporary-creds)
 5. [Clone k8sworkshop Repo](#clone-k8sworkshop-repo)
+6. [Create EKS Cluster](#create-eks-cluster)
+7. [Delete EKS Cluster](#delete-eks-cluster)
 
 ## Create Cloud9 Environment
 Click the link below to create a Cloud9 console environment
@@ -21,6 +23,21 @@ Click the link below to create an Instance Profile to Attach to your Cloud9 Envi
 ## Turn off temporary creds
 
 ## Clone k8sworkshop Repo
+Clone the k8sworkshpo repo and checkout the `eks` branch
 ```
+sudo su -
 git clone https://github.com/reactiveops/k8s-workshop.git
+git checkout eks
+```
+
+## Create EKS cluster
+```
+cd eks-provision
+./scripts/deps.sh
+./scripts/create-cluster.sh
+```
+
+## Delete EKS Cluster
+```
+./scripts/delete-cluster.sh
 ```
