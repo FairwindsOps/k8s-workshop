@@ -70,7 +70,7 @@ aws eks create-cluster \
 # poll for cluster creations complete
 get_cluster_status
 while [ "${CLUSTERSTATUS}" == "CREATING" ]; do
-    echo -n "The ${CLUSTERID} control plane is still ${CLUSTERSTATUS}"
+    echo "The ${CLUSTERID} EKS managed control plane is still ${CLUSTERSTATUS}"
     sleep 5
     get_cluster_status
 done
@@ -114,7 +114,7 @@ aws cloudformation create-stack \
   --capabilities CAPABILITY_NAMED_IAM \
   --parameters \
       ParameterKey=ClusterName,ParameterValue="${CLUSTERID}" \
-      ParameterKey=ClusterControlPlaneSecurityGroup,ParameterValue=$(cat sg-id.txt) \
+      ParameterKey=ClusterControlPlaneSecurityGroup,ParameterValue=$(cat ${INVENTORYDIR}/sg-id.txt) \
       ParameterKey=NodeGroupName,ParameterValue="${CLUSTERID}" \
       ParameterKey=NodeAutoScalingGroupMinSize,ParameterValue=1 \
       ParameterKey=NodeAutoScalingGroupMaxSize,ParameterValue=3 \
