@@ -28,7 +28,7 @@ echo -n "Please enter a name for your cluster and press [ENTER]":
 read CLUSTERID
 
 aws iam create-role \
-  --role-name ${CLUSTERID} \
+  --role-name ${CLUSTERID}-master \
   --assume-role-policy-document file://${DOCSDIR}/eks-role-policy.json \
   --query Role.Arn \
   --output text > ${INVENTORYDIR}/role-arn.txt
