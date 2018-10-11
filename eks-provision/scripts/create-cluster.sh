@@ -143,6 +143,6 @@ sed -i -e s,NODEROLEARN,$i,g ${DOCSDIR}/aws-auth-cm.yaml
 
 kubectl apply -f ${DOCSDIR}/aws-auth-cm.yaml
 
-sleep 5
+sleep 60
 echo "Checking for kubernetes workers"
 kubectl get nodes
