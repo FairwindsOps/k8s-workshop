@@ -31,4 +31,4 @@ while read LINE; do
 done < ${DOCSDIR}/policies.txt
 
 aws iam delete-role \
-  --role-name ${CLUSTERID}
+  --role-name ${CLUSTERID}-master
