@@ -26,7 +26,7 @@ aws cloudformation delete-stack \
 ### Delete role
 while read LINE; do
   aws iam detach-role-policy \
-    --role-name ${CLUSTERID} \
+    --role-name ${CLUSTERID}-masters \
     --policy-arn $LINE
 done < ${DOCSDIR}/policies.txt
 
