@@ -93,7 +93,7 @@ if [ "$?" -gt 0 ]; then
     --role-arn "$( cat ${INVENTORYDIR}/role-arn.txt )" \
     --resources-vpc-config \
     subnetIds=$( cat ${INVENTORYDIR}/subnet-id.txt ),securityGroupIds=$( cat ${INVENTORYDIR}/sg-id.txt )
-  
+
   # poll for cluster creations complete
   get_cluster_status
   while [ "${CLUSTERSTATUS}" == "CREATING" ]; do
@@ -108,8 +108,9 @@ if [ "$?" -gt 0 ]; then
   fi
 fi
 
-# configure kubect access
+# configure kubectl access
 # Set the cluster endpoint.
+mkdir -p ~/.kube
 cp ${TEMPLATESDIR}/.kubeconfig ~/.kube/config
 i=$(aws eks describe-cluster \
       --name ${CLUSTERID} \
