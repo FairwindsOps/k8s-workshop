@@ -1,6 +1,6 @@
 #! /usr/bin/env bash
 #
-# adds dependencies to cloud9 instance for 
+# adds dependencies to cloud9 instance for
 # completing the ReactiveOps EKS 101 training
 #
 

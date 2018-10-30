@@ -28,7 +28,6 @@ Click the link below to create an Instance Profile to Attach to your Cloud9 Envi
 ## Clone k8sworkshop Repo
 Clone the k8sworkshpo repo and checkout the `eks` branch
 ```
-sudo su -
 git clone https://github.com/reactiveops/k8s-workshop.git
 cd k8s-workshop
 git checkout eks
@@ -37,7 +36,7 @@ git checkout eks
 ## Create EKS cluster
 ```
 cd eks-provision
-./scripts/deps.sh
+sudo ./scripts/deps.sh
 ./scripts/create-cluster.sh
 ```
 
