@@ -25,19 +25,6 @@ Click the link below to create an Instance Profile to Attach to your Cloud9 Envi
 * Go to *AWS SETTINGS*, then _Credentials_
 * Toggle _AWS managed temporary credentials_ to off
 
-## Install Utilites
-* jq
-```
-wget https://github.com/stedolan/jq/releases/download/jq-1.5/jq-linux64
-sudo mv jq-linux64 /usr/local/bin/jq
-sudo chmod +x /usr/local/bin/jq
-```
-
-* kubectl
-```
-curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl
-```
-
 ## Clone k8sworkshop Repo
 Clone the k8sworkshpo repo and checkout the `eks` branch
 ```
