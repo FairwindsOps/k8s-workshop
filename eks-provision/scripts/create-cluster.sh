@@ -13,7 +13,7 @@ INVENTORYDIR="inventory"
 DOCSDIR="docs"
 TEMPLATESDIR="templates"
 KUBE_CONFIG=${HOME}/.kube/config
-#AWS_REGION=$(curl -s 169.254.169.254/latest/dynamic/instance-identity/document | jq -r .region)
+AWS_REGION=$(curl -s 169.254.169.254/latest/dynamic/instance-identity/document | jq -r .region)
 
 #- functions -#
 function get_cluster_status {
