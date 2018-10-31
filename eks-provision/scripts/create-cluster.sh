@@ -133,6 +133,8 @@ aws ec2 create-key-pair \
   --query KeyMaterial \
   --output text > "${DOCSDIR}/${CLUSTERID}.pem"
 
+chmod 400 ${DOCSDIR}/${CLUSTERID}.pem
+
 echo "Creating kubernetes workers"
 echo "Please be patient, this will take a few minutes"
 echo ""
