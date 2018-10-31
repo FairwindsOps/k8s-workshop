@@ -21,11 +21,13 @@ Click the link below to create an Instance Profile to Attach to your Cloud9 Envi
 [Cloud9](https://us-west-2.console.aws.amazon.com/ec2/v2/home?region=us-west-2#Instances:sort=desc:launchTime)
 
 ## Turn off temporary creds
+* In Cloud9 Environment, go to preferences `⌘,`
+* Go to *AWS SETTINGS*, then _Credentials_
+* Toggle _AWS managed temporary credentials_ to off
 
 ## Clone k8sworkshop Repo
 Clone the k8sworkshpo repo and checkout the `eks` branch
 ```
-sudo su -
 git clone https://github.com/reactiveops/k8s-workshop.git
 cd k8s-workshop
 git checkout eks
@@ -34,7 +36,7 @@ git checkout eks
 ## Create EKS cluster
 ```
 cd eks-provision
-./scripts/deps.sh
+sudo ./scripts/deps.sh
 ./scripts/create-cluster.sh
 ```
 
