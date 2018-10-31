@@ -2,10 +2,13 @@
 # Destroy Cluster
 
 #- VARIABLES -#
+CLUSTERID=$1
 DOCSDIR="docs"
 
-echo -n "Please enter the name of your cluster and press [ENTER]"
-read CLUSTERID
+if [ -z "${CLUSTERID}" ]; then
+  echo -n "Please enter a name for your cluster and press [ENTER]":
+  read CLUSTERID
+fi
 
 ### Destroy worker-nodes stack
 aws cloudformation delete-stack \
@@ -13,7 +16,7 @@ aws cloudformation delete-stack \
 
 ### Delete ec2 key pair
 aws ec2 delete-key-pair \
-  --key-name "${CLUSTERID}"
+  --key-name ${CLUSTERID}
 
 ### Delete EKS Cluster
 aws eks delete-cluster \

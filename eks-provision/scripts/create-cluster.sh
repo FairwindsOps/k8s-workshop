@@ -106,7 +106,7 @@ fi
 
 # configure kubect access
 # Set the cluster endpoint.
-cp ${TEMPLATESDIR}/.kubeconfig ~/.kube/config
+cp ${TEMPLATESDIR}/kubeconfig ${KUBE_CONFIG} 
 i=$(aws eks describe-cluster \
       --name ${CLUSTERID} \
       --query cluster.endpoint \
@@ -160,7 +160,7 @@ aws cloudformation describe-stacks \
   --output text > ${INVENTORYDIR}/node-role-arn.txt
 
 i=$(cat ${INVENTORYDIR}/node-role-arn.txt);
-cp ${INVENTORYDIR}/aws-auth-cm.yaml ${DOCSDIR}/
+cp ${TEMPLATESDIR}/aws-auth-cm.yaml ${DOCSDIR}/
 sed -i -e s,NODEROLEARN,$i,g ${DOCSDIR}/aws-auth-cm.yaml
 
 kubectl apply -f ${DOCSDIR}/aws-auth-cm.yaml
