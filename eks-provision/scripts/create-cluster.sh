@@ -23,11 +23,6 @@ CLUSTERSTATUS=$(aws eks describe-cluster \
                   --output text)
 }
 
-# setup region
-export AWS_REGION=$(curl -s 169.254.169.254/latest/dynamic/instance-identity/document | jq -r .region)
-echo "export AWS_REGION=${AWS_REGION}" >> ~/.bash_profile
-aws configure set default.region ${AWS_REGION}
-
 #- proecedural -#
 if [ -z "${CLUSTERID}" ]; then
   echo -n "Please enter a name for your cluster and press [ENTER]":
