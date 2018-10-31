@@ -133,8 +133,17 @@ aws ec2 create-key-pair \
   --query KeyMaterial \
   --output text > "${DOCSDIR}/${CLUSTERID}.pem"
 
+# Key perms need to be set so we can use it later
 chmod 400 ${DOCSDIR}/${CLUSTERID}.pem
 
+# Configure the aws-iam-authenticator configmap
+i=$(cat ${INVENTORYDIR}/node-role-arn.txt);
+cp ${TEMPLATESDIR}/aws-auth-cm.yaml ${DOCSDIR}/
+sed -i -e s,NODEROLEARN,$i,g ${DOCSDIR}/aws-auth-cm.yaml
+
+kubectl apply -f ${DOCSDIR}/aws-auth-cm.yaml
+
+# Create the nodes
 echo "Creating kubernetes workers"
 echo "Please be patient, this will take a few minutes"
 echo ""
@@ -160,12 +169,6 @@ aws cloudformation describe-stacks \
   --stack-name $CLUSTERID-workers \
   --query Stacks[0].Outputs[*].OutputValue \
   --output text > ${INVENTORYDIR}/node-role-arn.txt
-
-i=$(cat ${INVENTORYDIR}/node-role-arn.txt);
-cp ${TEMPLATESDIR}/aws-auth-cm.yaml ${DOCSDIR}/
-sed -i -e s,NODEROLEARN,$i,g ${DOCSDIR}/aws-auth-cm.yaml
-
-kubectl apply -f ${DOCSDIR}/aws-auth-cm.yaml
 
 sleep 60
 echo "Checking for kubernetes workers"
