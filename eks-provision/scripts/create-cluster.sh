@@ -162,7 +162,7 @@ aws cloudformation describe-stacks \
   --output text > ${INVENTORYDIR}/node-role-arn.txt
 
 i=$(cat ${INVENTORYDIR}/node-role-arn.txt);
-cp ${INVENTORYDIR}/aws-auth-cm.yaml ${DOCSDIR}/
+cp ${TEMPLATESDIR}/aws-auth-cm.yaml ${DOCSDIR}/
 sed -i -e s,NODEROLEARN,$i,g ${DOCSDIR}/aws-auth-cm.yaml
 
 kubectl apply -f ${DOCSDIR}/aws-auth-cm.yaml
