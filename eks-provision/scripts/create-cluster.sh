@@ -8,11 +8,12 @@
 #
 
 #- variables -#
-CLUSTERID=
+CLUSTERID=$1
 INVENTORYDIR="inventory"
 DOCSDIR="docs"
+TEMPLATESDIR="templates"
 KUBE_CONFIG=${HOME}/.kube/config
-AWS_REGION=$(curl -s 169.254.169.254/latest/dynamic/instance-identity/document | jq -r .region)
+#AWS_REGION=$(curl -s 169.254.169.254/latest/dynamic/instance-identity/document | jq -r .region)
 
 #- functions -#
 function get_cluster_status {
@@ -24,14 +25,23 @@ CLUSTERSTATUS=$(aws eks describe-cluster \
 
 
 #- proecedural -#
-echo -n "Please enter a name for your cluster and press [ENTER]":
-read CLUSTERID
+if [ -z "${CLUSTERID}" ]; then
+  echo -n "Please enter a name for your cluster and press [ENTER]":
+  read CLUSTERID
+fi
 
-aws iam create-role \
-  --role-name ${CLUSTERID}-masters \
-  --assume-role-policy-document file://${DOCSDIR}/eks-role-policy.json \
-  --query Role.Arn \
-  --output text > ${INVENTORYDIR}/role-arn.txt
+echo ""
+echo "Creating $CLUSTERID-masters role for EKS master nodes"
+aws iam get-role \
+  --role-name ${CLUSTERID}-masters > /dev/null 2>&1
+
+if [ "$?" -gt 0 ]; then
+  aws iam create-role \
+    --role-name ${CLUSTERID}-masters \
+    --assume-role-policy-document file://${DOCSDIR}/eks-role-policy.json \
+    --query Role.Arn \
+    --output text > ${INVENTORYDIR}/role-arn.txt
+fi
 
 while read LINE; do
     aws iam attach-role-policy \
@@ -41,12 +51,19 @@ done < ${DOCSDIR}/policies.txt
 
 ## Create VPC and Network Facilities
 echo "Creating VPC for EKS cluster"
-aws cloudformation create-stack \
-  --stack-name ${CLUSTERID} \
-  --template-body https://amazon-eks.s3-us-west-2.amazonaws.com/1.10.3/2018-06-05/amazon-eks-vpc-sample.yaml
+aws cloudformation describe-stacks \
+  --stack-name ${CLUSTERID} > /dev/null 2>&1
+
+if [ "$?" -gt 0 ]; then
+  aws cloudformation create-stack \
+    --stack-name ${CLUSTERID} \
+    --template-body https://amazon-eks.s3-us-west-2.amazonaws.com/1.10.3/2018-06-05/amazon-eks-vpc-sample.yaml
+fi
 
 aws cloudformation wait stack-create-complete --stack-name ${CLUSTERID}
 
+echo ""
+echo "Gathering ${CLUSTERID} cloudformation stack info for inventory ..."
 aws cloudformation describe-stacks \
   --stack-name ${CLUSTERID} \
   --query Stacks[0].Outputs[*].OutputValue \
@@ -62,30 +79,34 @@ aws cloudformation describe-stacks \
   --query Stacks[0].Outputs[*].OutputValue \
   --output text | tr '\t' '\n' | grep sg > ${INVENTORYDIR}/sg-id.txt
 
-
 ## Create Cluster
-aws eks create-cluster \
-  --name "${CLUSTERID}" \
-  --role-arn "$( cat ${INVENTORYDIR}/role-arn.txt )" \
-  --resources-vpc-config \
-  subnetIds=$( cat ${INVENTORYDIR}/subnet-id.txt ),securityGroupIds=$( cat ${INVENTORYDIR}/sg-id.txt )
+aws eks describe-cluster \
+  --name "${CLUSTERID}" > /dev/null 2>&1
 
-# poll for cluster creations complete
-get_cluster_status
-while [ "${CLUSTERSTATUS}" == "CREATING" ]; do
-    echo "The ${CLUSTERID} EKS managed control plane is still ${CLUSTERSTATUS}"
-    sleep 5
-    get_cluster_status
-done
-if [ "$CLUSTERSTATUS" == "ERROR" ]; then
-    echo "The ${CLUSTERID} control plane failed to create"
-    aws eks describe-cluster --name ${CLUSTERID} | jq .
-    exit 1
+if [ "$?" -gt 0 ]; then
+  aws eks create-cluster \
+    --name "${CLUSTERID}" \
+    --role-arn "$( cat ${INVENTORYDIR}/role-arn.txt )" \
+    --resources-vpc-config \
+    subnetIds=$( cat ${INVENTORYDIR}/subnet-id.txt ),securityGroupIds=$( cat ${INVENTORYDIR}/sg-id.txt )
+  
+  # poll for cluster creations complete
+  get_cluster_status
+  while [ "${CLUSTERSTATUS}" == "CREATING" ]; do
+      echo "The ${CLUSTERID} EKS managed control plane is still ${CLUSTERSTATUS}"
+      sleep 5
+      get_cluster_status
+  done
+  if [ "$CLUSTERSTATUS" == "ERROR" ]; then
+      echo "The ${CLUSTERID} control plane failed to create"
+      aws eks describe-cluster --name ${CLUSTERID} | jq .
+      exit 1
+  fi
 fi
 
 # configure kubect access
 # Set the cluster endpoint.
-cp ${DOCSDIR}/.kubeconfig ~/.kube/config
+cp ${TEMPLATESDIR}/.kubeconfig ~/.kube/config
 i=$(aws eks describe-cluster \
       --name ${CLUSTERID} \
       --query cluster.endpoint \
@@ -139,6 +160,7 @@ aws cloudformation describe-stacks \
   --output text > ${INVENTORYDIR}/node-role-arn.txt
 
 i=$(cat ${INVENTORYDIR}/node-role-arn.txt);
+cp ${INVENTORYDIR}/aws-auth-cm.yaml ${DOCSDIR}/
 sed -i -e s,NODEROLEARN,$i,g ${DOCSDIR}/aws-auth-cm.yaml
 
 kubectl apply -f ${DOCSDIR}/aws-auth-cm.yaml
