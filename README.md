@@ -13,5 +13,8 @@ In the workshops above you will be launching a two tier webapp. The web app is a
 
 ### Interacting with the App
 * [instance_ip]:[port]/[key]/[value] will set a key value
-* [instance_ip]:[port]/[key] will retreive the value
+* [instance_ip]:[port]/[key] will retrieve the value
 * [instance_ip]:[port] returns "Hello from Kubernetes"
+
+### Optional Configuration
+* When environment variable `CHAOS` is set to `true` then the webapp will die after a randomly generated number of requests between 1 and 100.

@@ -25,6 +25,12 @@ spec:
             periodSeconds: 3
             successThreshold: 1
             timeoutSeconds: 1
+          readinessProbe:
+            failureThreshold: 1
+            httpGet:
+              path: /
+              port: 8080
+              scheme: HTTP
           ports:
           - containerPort: 8080
             name: http
@@ -36,6 +42,8 @@ spec:
               value: 'redis-primary'
             - name: REDIS_PORT
               value: '6379'
+            # - name: CHAOS
+            #   value: true
             - name: SECRET1
               valueFrom:
                 secretKeyRef:
