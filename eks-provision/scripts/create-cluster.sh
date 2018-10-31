@@ -106,7 +106,7 @@ fi
 # configure kubectl access
 # Set the cluster endpoint.
 mkdir -p ~/.kube
-cp ${TEMPLATESDIR}/.kubeconfig ~/.kube/config
+cp ${TEMPLATESDIR}/kubeconfig ~/.kube/config
 i=$(aws eks describe-cluster \
       --name ${CLUSTERID} \
       --query cluster.endpoint \
