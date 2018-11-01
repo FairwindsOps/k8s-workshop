@@ -35,8 +35,9 @@ git checkout eks
 
 ## Create EKS cluster
 ```
+sudo su -
 cd eks-provision
-sudo ./scripts/deps.sh
+./scripts/deps.sh
 ./scripts/create-cluster.sh
 ```
 
