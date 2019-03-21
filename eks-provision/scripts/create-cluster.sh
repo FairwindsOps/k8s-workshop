@@ -57,7 +57,7 @@ aws cloudformation describe-stacks \
 if [ "$?" -gt 0 ]; then
   aws cloudformation create-stack \
     --stack-name ${CLUSTERID} \
-    --template-body https://amazon-eks.s3-us-west-2.amazonaws.com/1.10.3/2018-06-05/amazon-eks-vpc-sample.yaml
+    --template-body https://amazon-eks.s3-us-west-2.amazonaws.com/cloudformation/2019-02-11/amazon-eks-vpc-sample.yaml
 fi
 
 aws cloudformation wait stack-create-complete --stack-name ${CLUSTERID}
@@ -104,24 +104,11 @@ if [ "$?" -gt 0 ]; then
   fi
 fi
 
-# configure kubect access
-# Set the cluster endpoint.
-cp ${TEMPLATESDIR}/kubeconfig ${KUBE_CONFIG} 
-i=$(aws eks describe-cluster \
-      --name ${CLUSTERID} \
-      --query cluster.endpoint \
-      --output text);
-sed -i -e s,ENDPOINT,$i,g ${KUBE_CONFIG}
-
-#Set the cluster CA.
-i=$(aws eks describe-cluster \
-      --name ${CLUSTERID} \
-      --query cluster.certificateAuthority.data \
-      --output text);
-sed -i -e s,CADATA,$i,g ${KUBE_CONFIG}
-
-#Set the name of your cluster.
-sed -i -e s,CLUSTERID,$CLUSTERID,g ${KUBE_CONFIG}
+# set kubeconfig
+aws eks \
+  --region ${AWS_REGION} \
+  update-kubeconfig \
+  --name ${CLUSTERID}
 
 #Test connectivity
 sleep 2
@@ -138,7 +125,7 @@ echo "Please be patient, this will take a few minutes"
 echo ""
 aws cloudformation create-stack \
   --stack-name "${CLUSTERID}-workers" \
-  --template-body https://amazon-eks.s3-us-west-2.amazonaws.com/1.10.3/2018-06-05/amazon-eks-nodegroup.yaml \
+  --template-body https://amazon-eks.s3-us-west-2.amazonaws.com/cloudformation/2019-02-11/amazon-eks-nodegroup.yaml \
   --capabilities CAPABILITY_NAMED_IAM \
   --parameters \
       ParameterKey=ClusterName,ParameterValue="${CLUSTERID}" \
@@ -157,7 +144,7 @@ aws cloudformation wait stack-create-complete --stack-name "${CLUSTERID}-workers
 aws cloudformation describe-stacks \
   --stack-name $CLUSTERID-workers \
   --query Stacks[0].Outputs[*].OutputValue \
-  --output text > ${INVENTORYDIR}/node-role-arn.txt
+  --output text | awk '{print $1}' > ${INVENTORYDIR}/node-role-arn.txt
 
 i=$(cat ${INVENTORYDIR}/node-role-arn.txt);
 cp ${TEMPLATESDIR}/aws-auth-cm.yaml ${DOCSDIR}/
