@@ -112,7 +112,7 @@ aws eks \
 
 #Test connectivity
 sleep 2
-echo "Checking kuberentes namespaces"
+echo "Checking kubernetes namespaces"
 kubectl get namespaces
 
 aws ec2 create-key-pair \
