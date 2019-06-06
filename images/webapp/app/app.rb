@@ -29,7 +29,8 @@ end
 
 get '/' do
   
-  output = 'Hello from Kubernetes! '
+  output = 'Hello from Kubernetes! I am serving from pod: ' + `hostname`.strip
+  output += "\n"
   return output
 end
 
@@ -39,6 +40,7 @@ get '/load' do
     i.to_s
   end
   output = 'Working for my primary...' + chaos_count.to_s + ':' + chaos_limit.to_s
+  output += "\n"
   return output
 end 
 
@@ -51,15 +53,17 @@ get '/:key/:val' do
   else
       output += "Could not add " + key + "<br>"
   end
+  output += "\n"
   return output
 end
 
 get '/:key' do
   key = params.fetch('key','')
   if $redis.get(key)
-    return 'value of ' + key + ' is ' + $redis.get(key)
+    output = 'value of ' + key + ' is ' + $redis.get(key)
   else
-    return key + ' does not appear to exist'
+    output = key + ' does not appear to exist'
   end
+  output += "\n"
+  return output
 end
-
