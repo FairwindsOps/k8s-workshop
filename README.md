@@ -1,11 +1,11 @@
-# Kubernetes workshop with ReactiveOps
+# Kubernetes workshop with Fairwinds
 
-This repository stores the various docs and code ReactiveOps uses to do onsite trainings. To accomodate different audinces, there are a few different tracks:
+This repository stores the various docs and code Fairwinds uses to do onsite trainings. To accomodate different audinces, there are a few different tracks:
 
 * [Assembly Required Workshop Walkthrough](assembly_required/README.md)
   * Follow along the README.md to create, edit and upload your own yaml kubernetes manifests
 * [Complete](complete)
-  * The same manifests from the Assembly Required Workshop with the values filled in for you. 
+  * The same manifests from the Assembly Required Workshop with the values filled in for you.
 
 ## Workshop Interaction
 
