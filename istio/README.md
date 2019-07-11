@@ -1,6 +1,4 @@
-
-
-# ReactiveOps Kubernetes Istio Workbook
+# Fairwinds Kubernetes Istio Workbook
 This assumes you already have a working Kubernetes cluster version 1.9 or higher
 
 ## Download and install Istio
@@ -21,7 +19,7 @@ kubectl create clusterrolebinding cluster-admin-binding --clusterrole=cluster-ad
 kubectl apply -f install/kubernetes/istio-auth.yaml
 ```
 Example:
-https://github.com/reactiveops/k8s-workshop/blob/master/istio/examples/istio-auth.yaml
+https://github.com/FairwindsOps/k8s-workshop/blob/master/istio/examples/istio-auth.yaml
 
 ## Install Sidecar Injector
 ```
@@ -108,7 +106,7 @@ kubectl apply -f install/kubernetes/addons/prometheus.yaml
 
 #### Add Telemetry spec for Mixer and Prometheus
 ```
-kubectl apply -f https://raw.githubusercontent.com/reactiveops/k8s-workshop/master/istio/new_telemetry.yml
+kubectl apply -f https://raw.githubusercontent.com/FairwindsOps/k8s-workshop/master/istio/new_telemetry.yml
 ```
 #### View Prometheus Dashboard
 ```
@@ -136,11 +134,11 @@ ZIPKINPOD=$(kubectl get pods -n istio-system --selector=app=zipkin -o jsonpath='
 kubectl -n istio-system port-forward $ZIPKINPOD 8080:9411
 ```
 
-# Istio Docs: 
-https://istio.io/docs/welcome/  
+# Istio Docs:
+https://istio.io/docs/welcome/
 https://istio.io/docs/guides/bookinfo.html
 
-# More resources: 
+# More resources:
 https://github.com/retroryan/istio-workshop
 
 

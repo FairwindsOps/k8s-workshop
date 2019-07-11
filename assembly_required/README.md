@@ -1,4 +1,4 @@
-# Kubernetes workshop with ReactiveOps
+# Kubernetes workshop with Fairwinds
 
 ## Assembly Required Workshop Walkthrough
 
