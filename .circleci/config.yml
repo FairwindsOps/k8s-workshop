@@ -1,0 +1,18 @@
+version: 2.1
+
+orbs:
+  rok8s-scripts: reactiveops/rok8s-scripts@v8.1.0
+
+workflows:
+  build_and_push:
+    jobs:
+      - rok8s/docker_build_and_push:
+          config_file: images/build.config
+          docker-login: true
+          username: "fairwinds+circleci"
+          registry: "quay.io"
+          password-variable: fairwinds_quay_token
+          context: org-global
+          filters:
+            branches:
+              only: master
