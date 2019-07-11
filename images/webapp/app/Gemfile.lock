@@ -1,22 +1,24 @@
 GEM
   remote: https://rubygems.org/
   specs:
-    daemons (1.2.4)
-    eventmachine (1.2.5)
-    hiredis (0.6.1)
-    rack (1.6.8)
-    rack-protection (1.5.3)
+    daemons (1.3.1)
+    eventmachine (1.2.7)
+    hiredis (0.6.3)
+    mustermann (1.0.3)
+    rack (2.0.7)
+    rack-protection (2.0.5)
       rack
-    redis (3.3.3)
-    sinatra (1.4.8)
-      rack (~> 1.5)
-      rack-protection (~> 1.4)
-      tilt (>= 1.3, < 3)
+    redis (4.1.2)
+    sinatra (2.0.5)
+      mustermann (~> 1.0)
+      rack (~> 2.0)
+      rack-protection (= 2.0.5)
+      tilt (~> 2.0)
     thin (1.7.2)
       daemons (~> 1.0, >= 1.0.9)
       eventmachine (~> 1.0, >= 1.0.4)
       rack (>= 1, < 3)
-    tilt (2.0.8)
+    tilt (2.0.9)
 
 PLATFORMS
   ruby
@@ -28,4 +30,4 @@ DEPENDENCIES
   thin
 
 BUNDLED WITH
-   1.15.4
+   1.16.4
