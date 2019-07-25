@@ -11,7 +11,7 @@ spec:
     spec:
       containers:
         - name: webapp
-          image: quay.io/reactiveops/k8s-workshop:latest
+          image: quay.io/fairwinds/k8s-workshop:latest
           command: ["ruby", "app/app.rb"]
           ports:
           - containerPort: 8080
