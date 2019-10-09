@@ -30,3 +30,4 @@ tar -zxvf k6-v0.25.1-linux64.tar.gz
 mv k6-v0.25.1-linux64/k6 ~/clouddrive/bin/k6
 
 export PATH=~/clouddrive/bin/:$PATH
+cd ~/clouddrive/k8s-workshop
