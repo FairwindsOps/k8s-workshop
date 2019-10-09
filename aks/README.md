@@ -14,6 +14,6 @@ This script will allow you to run this workshop in Azure Kubernetes Service.
 ```
 cd ~/clouddrive
 git clone https://github.com/fairwindsops/k8s-workshop
-cd k8s-workshop/aks
+cd ~/clouddrive/k8s-workshop/aks
 source ./setup.sh
 ```
