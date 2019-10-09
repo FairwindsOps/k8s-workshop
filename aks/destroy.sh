@@ -6,4 +6,4 @@ LOCATION="${3:-eastus}"
 
 printf "Destroying $CLUSTER_NAME in $LOCATION in resource group $RESOURCE_GROUP\n\n"
 
-az group destroy --name $RESOURCE_GROUP --loaction $LOCATION
+az group delete --name $RESOURCE_GROUP
