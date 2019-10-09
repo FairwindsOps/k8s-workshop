@@ -1,9 +1,11 @@
 #!/bin/bash
 
-export TARGET=$1
+if [ -z $1 ]; then
+    echo "You need to specify an address to target"
+fi
 
-wget https://github.com/loadimpact/k6/releases/download/v0.25.1/k6-v0.25.1-linux64.tar.gz
-tar -zxvf k6-v0.25.1-linux64.tar.gz
-mv k6-v0.25.1-linux64/k6 /usr/local/bin/k6
+command -v k6 >/dev/null 2>&1 || { echo >&2 "I require k6 but it's not installed.  Aborting."; exit 1; }
+
+export TARGET=$1
 
 k6 run load.js
