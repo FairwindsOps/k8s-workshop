@@ -10,4 +10,5 @@ command -v k6 >/dev/null 2>&1 || { echo >&2 "I require k6 but it's not installed
 export TARGET=$1
 
 k6 run load.js --vus=5 --duration=0 -q --max=100 &
-reset
+sleep 3
+clear
