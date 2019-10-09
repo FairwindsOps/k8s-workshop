@@ -7,5 +7,5 @@ LOCATION="${3:-eastus}"
 printf "Destroying $CLUSTER_NAME in $LOCATION in resource group $RESOURCE_GROUP\n\n"
 
 pkill k6
-az aks delete --name $CLUSTER_NAME
+az aks delete --name $CLUSTER_NAME --resource-group $RESOURCE_GROUP
 az group delete --name $RESOURCE_GROUP
