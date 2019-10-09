@@ -69,5 +69,4 @@ Next we'll be:
 This section allows us to load test the web app and see the cluster responding by scaling the pod count up.
 
 1. Scaling
-    * Install `ab`: `sudo apt-get install apache2-utils --yes`
-    * Apply some load `ab -n 30000 -c 100 http://[external_ip]:[port]/`
+    * Apply some load `./load.sh`

@@ -28,6 +28,7 @@ mkdir -p ~/clouddrive/bin
 wget https://github.com/loadimpact/k6/releases/download/v0.25.1/k6-v0.25.1-linux64.tar.gz
 tar -zxvf k6-v0.25.1-linux64.tar.gz
 mv k6-v0.25.1-linux64/k6 ~/clouddrive/bin/k6
+rm -rf k6-v0.25.1-linux64  k6-v0.25.1-linux64.tar.gz
 
 export PATH=~/clouddrive/bin/:$PATH
 cd ~/clouddrive/k8s-workshop
