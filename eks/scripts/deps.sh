@@ -27,6 +27,11 @@ export AWS_REGION=$(curl -s 169.254.169.254/latest/dynamic/instance-identity/doc
 echo "export AWS_REGION=${AWS_REGION}" >> ~/.bash_profile
 aws configure set default.region ${AWS_REGION}
 
+# eksctl
+curl --silent --location "https://github.com/weaveworks/eksctl/releases/download/latest_release/eksctl_$(uname -s)_amd64.tar.gz" | tar xz -C /tmp
+sudo mv /tmp/eksctl /usr/local/bin/eksctl
+
 # verify binaries
 printf "\n"
 printf "Kubectl Version:\t%s\n" "$(kubectl version --short --client)"
+printf "Eksctl Version:\t%s\n" "$(eksctl version)"

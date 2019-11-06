@@ -89,7 +89,7 @@ if [ "$?" -gt 0 ]; then
     --role-arn "$( cat ${INVENTORYDIR}/role-arn.txt )" \
     --resources-vpc-config \
     subnetIds=$( cat ${INVENTORYDIR}/subnet-id.txt ),securityGroupIds=$( cat ${INVENTORYDIR}/sg-id.txt )
-  
+
   # poll for cluster creations complete
   get_cluster_status
   while [ "${CLUSTERSTATUS}" == "CREATING" ]; do
