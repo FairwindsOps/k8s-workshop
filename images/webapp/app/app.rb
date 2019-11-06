@@ -8,7 +8,7 @@ require 'digest/md5'
 
 
 set :bind, '0.0.0.0'
-set :port, '8080'    
+set :port, '8080'
 
 $redis = Redis.new(:host => ENV['REDIS_HOST'], :port => ENV['REDIS_PORT'])
 
@@ -28,7 +28,7 @@ before do
 end
 
 get '/' do
-  
+
   output = 'Hello from Kubernetes! I am serving from pod: ' + `hostname`.strip
   output += "\n"
   return output
@@ -42,7 +42,7 @@ get '/load' do
   output = 'Working for my primary...' + chaos_count.to_s + ':' + chaos_limit.to_s
   output += "\n"
   return output
-end 
+end
 
 get '/:key/:val' do
   key = params.fetch('key','')
