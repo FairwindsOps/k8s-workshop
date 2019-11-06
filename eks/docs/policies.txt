@@ -1,0 +1,2 @@
+arn:aws:iam::aws:policy/AmazonEKSClusterPolicy
+arn:aws:iam::aws:policy/AmazonEKSServicePolicy
