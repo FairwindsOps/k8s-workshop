@@ -68,8 +68,7 @@ Next we'll be:
 ### Scaling the Application based on CPU
 This section allows us to load test the web app and see the cluster responding by scaling the pod count up.
 
-1. Scaling
-    * Apply some load `./load.sh`
-    * Open a new terminal or tab in your shell
-    * Look at the hpa occasionally to see the cpu usage go up `kubectl get hpa -n k8s-workshop`
-    * The number of pods should scale up to meet the new demand `kubectl get deployment, po -n k8s-workshop`
+* Apply some load `./load.sh`
+* Open a new terminal or tab in your shell
+* Look at the hpa occasionally to see the cpu usage go up `kubectl get hpa -n k8s-workshop`
+* The number of pods should scale up to meet the new demand `kubectl get deployment, po -n k8s-workshop`
