@@ -9,4 +9,4 @@ if [ -z "${CLUSTERID}" ]; then
   read CLUSTERID
 fi
 
-eksctl delete cluster --name $CLUSTERID
+eksctl delete cluster $CLUSTERID -w
