@@ -19,10 +19,6 @@ curl -LO https://storage.googleapis.com/kubernetes-release/release/${KUBECTL_VER
   && chmod +x ./kubectl \
   && mv ./kubectl /usr/local/bin/kubectl
 
-# install aws-iam-authenticator
-go get -u -v github.com/kubernetes-sigs/aws-iam-authenticator/cmd/aws-iam-authenticator
-sudo mv ~/go/bin/aws-iam-authenticator /usr/bin/aws-iam-authenticator
-
 # amazon-linux deps
 yum install -y jq
 
@@ -34,4 +30,3 @@ aws configure set default.region ${AWS_REGION}
 # verify binaries
 printf "\n"
 printf "Kubectl Version:\t%s\n" "$(kubectl version --short --client)"
-printf "AWS IAM Authenticator:\t%s\n" "$(which aws-iam-authenticator)"
