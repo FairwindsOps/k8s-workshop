@@ -65,7 +65,7 @@ cd k8s-workshop
 
 ## Create EKS cluster
 ```
-cd eks-provision
+cd eks
 ./scripts/deps.sh
 ./scripts/create-cluster.sh
 ```
