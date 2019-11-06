@@ -59,7 +59,7 @@ Clone the k8s-workshpo repo and checkout the `eks` branch
 
 ```
 sudo su -
-git clone https://github.com/reactiveops/k8s-workshop.git -b eks
+git clone https://github.com/reactiveops/k8s-workshop.git
 cd k8s-workshop
 ```
 
