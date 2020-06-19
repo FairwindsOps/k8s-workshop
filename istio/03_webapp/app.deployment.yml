@@ -1,10 +1,13 @@
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   annotations:
     flux.weave.works/automated: "true"
   name: webapp
 spec:
+  selector:
+    matchLabels:
+      app: webapp
   template:
     metadata:
       labels:

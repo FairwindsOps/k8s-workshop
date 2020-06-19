@@ -1,10 +1,15 @@
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: redis-primary
   namespace: k8s-workshop
 spec:
   replicas: 1
+  selector:
+    matchLabels:
+      app: redis
+      role: primary
+      tier: backend
   template:
     metadata:
       labels:

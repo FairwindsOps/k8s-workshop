@@ -1,9 +1,12 @@
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: webapp
   namespace: k8s-workshop
 spec:
+  selector:
+    matchLabels:
+      app: webapp
   template:
     metadata:
       labels:
