@@ -7,7 +7,7 @@ spec:
   minReplicas: 1
   maxReplicas:
   scaleTargetRef:
-    apiVersion: extensions/v1beta1
+    apiVersion: apps/v1
     kind: Deployment
     name: redis-replica
   targetCPUUtilizationPercentage:
