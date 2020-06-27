@@ -5,7 +5,7 @@ GEM
     eventmachine (1.2.7)
     hiredis (0.6.3)
     mustermann (1.0.3)
-    rack (2.0.8)
+    rack (2.2.3)
     rack-protection (2.0.7)
       rack
     redis (4.1.3)
@@ -25,7 +25,7 @@ PLATFORMS
 
 DEPENDENCIES
   hiredis
-  rack (>= 2.0.8)
+  rack (>= 2.1.4)
   redis
   sinatra
   thin
