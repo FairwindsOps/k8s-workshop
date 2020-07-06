@@ -4,6 +4,7 @@ metadata:
   annotations:
     flux.weave.works/automated: "true"
   name: webapp
+  namespace: k8s-workshop
 spec:
   selector:
     matchLabels:
