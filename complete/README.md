@@ -72,3 +72,8 @@ This section allows us to load test the web app and see the cluster responding b
 * Open a new terminal or tab in your shell
 * Look at the hpa occasionally to see the cpu usage go up `kubectl get hpa -n k8s-workshop`
 * The number of pods should scale up to meet the new demand `kubectl get deployment, po -n k8s-workshop`
+
+### Optional Ingress (Separate Controller Required)
+The `03_ingress` sub-directory contains an optional Ingress definition. The `kubernetes.io/ingress.class` annotation may need to be changed to match that of your Ingress Controller.
+
+Note that an Ingress Controller must be installed for Ingress resources to function. See the [Ingress Nginx installation instructions](https://kubernetes.github.io/ingress-nginx/deploy/) for more information.
