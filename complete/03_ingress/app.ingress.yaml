@@ -1,0 +1,26 @@
+# You may need to change the ingress class below,
+# to match the Nginx Ingress configuration.
+#
+# Access this INgress by specifying the HOST header.
+# Replace ${load_balancer_ip} with the IP of an Ingress Controller LB.
+# curl --header 'HOST: test.domain.com' ${load_balancer_ip}/
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: webapp
+  namespace: k8s-workshop
+  annotations:
+    kubernetes.io/ingress.class: nginx
+spec:
+  rules:
+  - host: test.domain.com
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: webapp
+            port:
+              number: 80
